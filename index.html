@@ -1027,6 +1027,7 @@
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
                         <option value="voe_worker">VOE Player (Ultra Fast)</option>
+                        <option value="vidzee">Vidzee (TMDB Fast)</option>
                         <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
                         <option value="gemma">Gemma Player (IMDb Server)</option>
                         <option value="insertunit">InsertUnit (IMDb Server)</option>
@@ -1076,6 +1077,7 @@
         // Server URL Providers for direct movie & TV streaming using TMDB ID
         const SERVER_PROVIDERS = {
             voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
+            vidzee: (id) => `https://player.vidzee.wtf/embed/movie/${id}`,
             vidsrc_sbs: (id, imdbId, type = "movie", s = 1, e = 1) => type === "tv" ? `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}` : `https://vidsrc.sbs/embed/movie/${id}`,
             gemma: (id, imdbId) => `https://gemma416okl.com/play/${imdbId || id}`,
             insertunit: (id, imdbId) => `https://api.insertunit.ws/embed/imdb/${imdbId || id}`,
