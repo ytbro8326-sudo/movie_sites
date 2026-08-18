@@ -1056,6 +1056,14 @@
             <div id="player-details-row">
                 <div class="player-info-title" id="p-info-title">Movie Details</div>
                 <div class="player-info-overview" id="p-info-overview">Loading overview…</div>
+                
+                <div id="player-collection-container" style="display:none;">
+                    <div class="section-title" id="p-collection-title" style="font-size:15px; margin-bottom:12px;"><span class="dot" style="background:var(--gold)"></span> The Collection</div>
+                    <div class="h-scroll-wrap" style="padding:0 0 10px;">
+                        <div class="h-scroll" id="player-collection-row"></div>
+                    </div>
+                </div>
+
                 <div class="section-title" style="font-size:15px; margin-bottom:12px;"><span class="dot"></span> Similar Movies</div>
                 <div class="h-scroll-wrap" style="padding:0 0 10px;">
                     <div class="h-scroll" id="player-similar-row"></div>
@@ -1081,7 +1089,20 @@
         let hlsInstance = null;
         let currentVidKingStreams = [];
 
-        const VIDKING_API_BASE = "https://vidking-3.ytbro8326.workers.dev/api";
+        const VIDKING_API_BASES = [
+            "https://vidking-3.ytbro8326.workers.dev/api",
+            "https://vidking-4.ytbro8326.workers.dev/api",
+            "https://vidking-5.ytbro8326.workers.dev/api",
+            "https://vidking-6.ytbro8326.workers.dev/api",
+            "https://vidking-7.ytbro8326.workers.dev/api"
+        ];
+        let currentVidKingIndex = 0;
+
+        function getNextVidKingApi() {
+            const api = VIDKING_API_BASES[currentVidKingIndex];
+            currentVidKingIndex = (currentVidKingIndex + 1) % VIDKING_API_BASES.length;
+            return api;
+        }
 
         // Server URL Providers for direct movie & TV streaming using TMDB ID
         const SERVER_PROVIDERS = {
@@ -1122,7 +1143,8 @@
 
         async function fetchVidKingStreams(tmdbId) {
             try {
-                const res = await fetch(`${VIDKING_API_BASE}/${tmdbId}`);
+                const apiBase = getNextVidKingApi();
+                const res = await fetch(`${apiBase}/${tmdbId}`);
                 if (!res.ok) return [];
                 const data = await res.json();
                 if (data && data.success && Array.isArray(data.results) && data.results.length > 0) {
@@ -1529,6 +1551,27 @@
 
             // Load iframe server embed
             await updatePlayerIframe(movie, currentServer);
+
+            // Load Collection Movies
+            const collectionContainer = document.getElementById('player-collection-container');
+            const collectionRow = document.getElementById('player-collection-row');
+            if (movie.belongs_to_collection) {
+                document.getElementById('p-collection-title').innerHTML = `<span class="dot" style="background:var(--gold)"></span> ${movie.belongs_to_collection.name}`;
+                collectionContainer.style.display = 'block';
+                collectionRow.innerHTML = `<div style="padding:20px; color:var(--text3);"><div class="loading-spin"></div></div>`;
+                fetchTMDB(`/collection/${movie.belongs_to_collection.id}`).then(collData => {
+                    if (collData && collData.parts && collData.parts.length > 0) {
+                        // Sort by release date for correct order
+                        const sortedParts = collData.parts.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+                        collectionRow.innerHTML = sortedParts.map(m => createMovieCardHTML(m)).join('');
+                    } else {
+                        collectionContainer.style.display = 'none';
+                    }
+                });
+            } else {
+                collectionContainer.style.display = 'none';
+                collectionRow.innerHTML = '';
+            }
 
             // Load Similar Movies
             loadHorizontalList(`/movie/${tmdbId}/similar`, {}, 'player-similar-row');
