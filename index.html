@@ -1026,6 +1026,7 @@
                 <div id="server-selector-wrap">
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
+                        <option value="voe_worker">VOE Player (Ultra Fast)</option>
                         <option value="primesrc">PrimeSrc (Fast HD)</option>
                         <option value="vidsrc_to">VidSrc.to</option>
                         <option value="vidsrc_icu">VidSrc.icu</option>
@@ -1066,11 +1067,12 @@
         const TMDB_IMG_W342 = "https://image.tmdb.org/t/p/w342";
 
         let currentMovie = null;
-        let currentServer = "primesrc";
+        let currentServer = "voe_worker";
         let activeGenre = null;
 
         // Server URL Providers for direct TMDB ID movie streaming
         const SERVER_PROVIDERS = {
+            voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
             primesrc: (id) => `https://primesrc.me/embed/movie?tmdb=${id}`,
             vidsrc_to: (id) => `https://vidsrc.to/embed/movie/${id}`,
             vidsrc_icu: (id) => `https://vidsrc.icu/embed/movie/${id}`,
