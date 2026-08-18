@@ -1027,6 +1027,7 @@
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
                         <option value="voe_worker">VOE Player (Ultra Fast)</option>
+                        <option value="gemma">Gemma Player (IMDb Server)</option>
                         <option value="insertunit">InsertUnit (IMDb Server)</option>
                         <option value="primesrc">PrimeSrc (Fast HD)</option>
                         <option value="vidsrc_to">VidSrc.to</option>
@@ -1074,6 +1075,7 @@
         // Server URL Providers for direct movie streaming
         const SERVER_PROVIDERS = {
             voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
+            gemma: (id, imdbId) => `https://gemma416okl.com/play/${imdbId || id}`,
             insertunit: (id, imdbId) => `https://api.insertunit.ws/embed/imdb/${imdbId || id}`,
             primesrc: (id) => `https://primesrc.me/embed/movie?tmdb=${id}`,
             vidsrc_to: (id) => `https://vidsrc.to/embed/movie/${id}`,
@@ -1366,8 +1368,8 @@
 
             const frame = document.getElementById('player-frame');
 
-            if (serverKey === 'insertunit') {
-                // Convert TMDB ID to IMDb ID specifically for InsertUnit server
+            if (serverKey === 'insertunit' || serverKey === 'gemma') {
+                // Convert TMDB ID to IMDb ID specifically for IMDb-based servers
                 if (!imdbId) {
                     const extData = await fetchTMDB(`/movie/${tmdbId}/external_ids`);
                     imdbId = extData ? extData.imdb_id : null;
@@ -1377,7 +1379,11 @@
                 }
 
                 if (imdbId) {
-                    frame.src = `https://api.insertunit.ws/embed/imdb/${imdbId}`;
+                    if (serverKey === 'gemma') {
+                        frame.src = `https://gemma416okl.com/play/${imdbId}`;
+                    } else {
+                        frame.src = `https://api.insertunit.ws/embed/imdb/${imdbId}`;
+                    }
                 } else {
                     console.warn(`No IMDb ID found for TMDB ${tmdbId}, falling back to PrimeSrc`);
                     frame.src = `https://primesrc.me/embed/movie?tmdb=${tmdbId}`;
