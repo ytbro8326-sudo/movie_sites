@@ -833,70 +833,172 @@
             }
         }
 
-        /* ══════════ RESPONSIVE ══════════ */
+        /* ══════════ RESPONSIVE — TABLET ══════════ */
+        @media (max-width: 900px) {
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 14px;
+            }
+            .h-scroll .movie-card { width: 145px; }
+        }
+
+        /* ══════════ RESPONSIVE — MOBILE ══════════ */
         @media (max-width: 768px) {
+            /* Navbar */
             #navbar {
-                padding: 0 16px;
-                height: 58px;
+                padding: 0 12px;
+                height: auto;
+                min-height: 56px;
+                flex-wrap: wrap;
+                gap: 8px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            .logo { font-size: 17px; flex-shrink: 0; }
+            #search-wrap {
+                order: 3;
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+            .nav-links {
+                order: 2;
+                overflow-x: auto;
+                scrollbar-width: none;
+                gap: 6px;
+                flex-wrap: nowrap;
+                width: 100%;
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-btn {
+                padding: 5px 11px;
+                font-size: 11px;
+                flex-shrink: 0;
+            }
+            #search-inp {
+                font-size: 13px;
+                padding: 9px 14px 9px 38px;
+            }
+            #search-dropdown { max-height: 320px; }
+
+            /* Hero */
+            #hero {
+                padding: 0 14px 28px;
+                min-height: 300px;
+                align-items: flex-end;
+            }
+            #hero-title { font-size: 20px; line-height: 1.2; }
+            #hero-desc { font-size: 12px; -webkit-line-clamp: 2; margin-bottom: 14px; }
+            #hero-meta { gap: 8px; margin-bottom: 10px; }
+            .hero-score { font-size: 12px; }
+            .hero-tag, .hero-year { font-size: 10.5px; }
+            #hero-actions { gap: 8px; }
+            .hero-btn { padding: 10px 18px; font-size: 12.5px; gap: 6px; border-radius: 10px; }
+            .hero-badge { font-size: 10px; padding: 4px 10px; margin-bottom: 10px; }
+
+            /* Genre bar */
+            #genre-bar { padding: 10px 12px; gap: 6px; }
+            .genre-pill { padding: 6px 13px; font-size: 11.5px; }
+
+            /* Sections */
+            .section { padding: 18px 12px 2px; }
+            .section-title { font-size: 16px; }
+            .see-all { font-size: 12px; }
+            .h-scroll-wrap { padding: 0 12px 16px; }
+            .h-scroll { gap: 10px; }
+            .h-scroll .movie-card { width: 120px; }
+
+            /* Movie grid */
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
                 gap: 10px;
             }
+            .card-title { font-size: 11.5px; }
+            .card-sub { font-size: 10px; }
+            .card-score { font-size: 10px; padding: 2px 6px; }
+            .card-quality { font-size: 8px; padding: 2px 5px; }
+            .card-year { font-size: 9.5px; padding: 2px 5px; }
+            .play-btn-circle { width: 36px; height: 36px; }
 
-            .logo {
-                font-size: 18px;
-            }
-
-            .nav-btn {
-                padding: 6px 12px;
-                font-size: 11px;
-            }
-
-            #hero {
-                padding: 0 18px 32px;
-                min-height: 380px;
-            }
-
-            #hero-title {
-                font-size: 24px;
-            }
-
-            #hero-desc {
-                font-size: 12.5px;
-            }
-
-            .section {
-                padding: 24px 16px 4px;
-            }
-
-            .h-scroll-wrap {
-                padding: 0 16px 20px;
-            }
-
-            #genre-bar {
-                padding: 14px 16px;
-            }
-
-            .movie-grid {
-                grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-                gap: 12px;
-            }
-
-            .h-scroll .movie-card {
-                width: 130px;
-            }
-
+            /* Player top bar — stacked on mobile */
             #player-topbar {
-                padding: 0 12px;
-                height: 52px;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 8px 12px;
+                gap: 8px;
+                align-items: center;
             }
-
-            #player-title {
-                font-size: 13px;
+            #back-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                border-radius: 8px;
             }
-
+            #player-movie-info {
+                flex: 1;
+                min-width: 0;
+                gap: 6px;
+            }
+            #player-title { font-size: 12.5px; }
+            #player-meta-badge {
+                font-size: 10px;
+                padding: 2px 6px;
+                flex-shrink: 0;
+            }
+            #server-selector-wrap {
+                order: 3;
+                width: 100%;
+                margin-left: 0;
+                gap: 6px;
+            }
+            .server-label { font-size: 10px; }
             #server-select {
-                font-size: 11px;
-                padding: 6px 10px;
+                flex: 1;
+                font-size: 11.5px;
+                padding: 7px 10px;
+                border-radius: 8px;
             }
+            #vidking-quality-select {
+                font-size: 11px !important;
+                padding: 6px 8px !important;
+                border-radius: 8px !important;
+            }
+
+            /* Player details row */
+            #player-details-row {
+                padding: 16px 14px;
+                max-height: none;
+            }
+            .player-info-title { font-size: 15px; margin-bottom: 5px; }
+            .player-info-overview { font-size: 12.5px; }
+        }
+
+        /* ══════════ RESPONSIVE — SMALL PHONES ══════════ */
+        @media (max-width: 420px) {
+            .logo { font-size: 15px; }
+            #hero { min-height: 260px; padding: 0 10px 22px; }
+            #hero-title { font-size: 17px; }
+            .hero-btn { padding: 9px 14px; font-size: 11.5px; }
+            .movie-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .h-scroll .movie-card { width: 105px; }
+            #server-select { font-size: 10.5px; }
+            .section-title { font-size: 14px; }
+        }
+
+        /* ══════════ PLAYER — LANDSCAPE MOBILE FIX ══════════ */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #player-topbar {
+                flex-wrap: nowrap;
+                height: 48px;
+                padding: 0 10px;
+                overflow-x: auto;
+            }
+            #server-selector-wrap {
+                order: 0;
+                width: auto;
+            }
+            #player-details-row { max-height: 160px; }
         }
     </style>
 </head>
@@ -1027,9 +1129,9 @@
                 <div id="server-selector-wrap">
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
-                        <option value="vidking">VidKing Stream (HLS Direct)</option>
-                        <option value="voe_worker">VOE Player (Ultra Fast)</option>
+                        <option value="voe_worker" selected>OE Player (Ultra Fast)</option>
                         <option value="vidzee">Vidzee (TMDB Fast)</option>
+                        <option value="vidking">idKing Stream (HLS Direct)</option>
                         <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
                         <option value="gemma">Gemma Player (IMDb Server)</option>
                         <option value="insertunit">InsertUnit (IMDb Server)</option>
@@ -1084,7 +1186,7 @@
         const TMDB_IMG_W342 = "https://image.tmdb.org/t/p/w342";
 
         let currentMovie = null;
-        let currentServer = "vidking";
+        let currentServer = "voe_worker";
         let activeGenre = null;
         let hlsInstance = null;
         let currentVidKingStreams = [];
@@ -1587,7 +1689,7 @@
 
             const frame = document.getElementById('player-frame');
 
-            // 1. VidKing HLS Direct Player
+            // 1. idKing HLS Direct Player
             if (serverKey === 'vidking') {
                 await playVidKingHLS(tmdbId);
                 return;
