@@ -842,6 +842,28 @@
             .h-scroll .movie-card { width: 145px; }
         }
 
+        /* ══════════ PLAYER MOBILE HEIGHT FIX ══════════ */
+        @media (max-width: 768px) {
+            #view-player {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            #player-main {
+                flex-shrink: 0;
+                height: 56vw;
+                min-height: 200px;
+                max-height: 340px;
+                position: relative;
+            }
+            #player-frame,
+            #player-video {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
         /* ══════════ RESPONSIVE — MOBILE ══════════ */
         @media (max-width: 768px) {
             /* Navbar */
@@ -966,6 +988,8 @@
             #player-details-row {
                 padding: 16px 14px;
                 max-height: none;
+                overflow-y: visible;
+                flex-shrink: 0;
             }
             .player-info-title { font-size: 15px; margin-bottom: 5px; }
             .player-info-overview { font-size: 12.5px; }
@@ -1130,6 +1154,7 @@
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
                         <option value="voe_worker" selected>OE Player (Ultra Fast)</option>
+                        <option value="dood">dood</option>
                         <option value="vidzee">Vidzee (TMDB Fast)</option>
                         <option value="vidking">idKing Stream (HLS Direct)</option>
                         <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
@@ -1209,6 +1234,7 @@
         // Server URL Providers for direct movie & TV streaming using TMDB ID
         const SERVER_PROVIDERS = {
             voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
+            dood: (id) => `https://proxy-stream-server-4m7f.onrender.com/api/tmdb/${id}`,
             vidzee: (id) => `https://player.vidzee.wtf/embed/movie/${id}`,
             vidsrc_sbs: (id, imdbId, type = "movie", s = 1, e = 1) => type === "tv" ? `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}` : `https://vidsrc.sbs/embed/movie/${id}`,
             gemma: (id, imdbId) => `https://gemma416okl.com/play/${imdbId || id}`,
