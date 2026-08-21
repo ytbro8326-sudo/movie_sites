@@ -1175,7 +1175,7 @@
             <div id="player-main">
                 <div id="stream-status" style="display:none; position:absolute; top:12px; right:12px; z-index:15; background:rgba(7,7,13,0.85); backdrop-filter:blur(8px); color:#fff; font-size:11.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--border2); font-weight:600;"></div>
                 <iframe id="player-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock"></iframe>
+                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
                 <video id="player-video" controls playsinline style="display:none; width:100%; height:100%; position:absolute; inset:0; background:#000; outline:none; z-index:5;"></video>
             </div>
 
@@ -1234,7 +1234,7 @@
         // Server URL Providers for direct movie & TV streaming using TMDB ID
         const SERVER_PROVIDERS = {
             voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
-            dood: (id) => `https://proxy-stream-server-4m7f.onrender.com/api/tmdb/${id}`,
+            dood: (id) => `https://proxy-stream-server-4m7f.onrender.com/api/${id}`,
             vidzee: (id) => `https://player.vidzee.wtf/embed/movie/${id}`,
             vidsrc_sbs: (id, imdbId, type = "movie", s = 1, e = 1) => type === "tv" ? `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}` : `https://vidsrc.sbs/embed/movie/${id}`,
             gemma: (id, imdbId) => `https://gemma416okl.com/play/${imdbId || id}`,
