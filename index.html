@@ -1752,7 +1752,40 @@
             // 3. Other TMDB direct iframe servers
             const provider = SERVER_PROVIDERS[serverKey] || SERVER_PROVIDERS['voe_worker'] || SERVER_PROVIDERS['primesrc'];
             const url = provider(tmdbId);
-            frame.src = url;
+
+            // Auto-fallback: if VOE fails or times out, switch to dood
+            if (serverKey === 'voe_worker') {
+                let voeFallbackTimer = null;
+                let voeFailed = false;
+
+                function switchToDood() {
+                    if (voeFailed) return;
+                    voeFailed = true;
+                    clearTimeout(voeFallbackTimer);
+                    frame.removeEventListener('error', switchToDood);
+                    showStreamStatus('VOE not found — switching to dood…', 3000);
+                    frame.src = SERVER_PROVIDERS['dood'](tmdbId);
+                }
+
+                frame.removeEventListener('error', frame._voeErrorHandler);
+                frame._voeErrorHandler = switchToDood;
+                frame.addEventListener('error', switchToDood);
+
+                // Timeout fallback — if VOE hasn't loaded in 9s, try dood
+                voeFallbackTimer = setTimeout(() => {
+                    try {
+                        const fdoc = frame.contentDocument || frame.contentWindow?.document;
+                        const isBlank = !fdoc || fdoc.URL === 'about:blank' || fdoc.body?.innerHTML?.trim() === '';
+                        if (isBlank) switchToDood();
+                    } catch(e) {
+                        // cross-origin means it loaded something — leave it
+                    }
+                }, 9000);
+
+                frame.src = url;
+            } else {
+                frame.src = url;
+            }
         }
 
         async function changeServer(serverKey) {
