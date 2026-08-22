@@ -2058,9 +2058,24 @@
                         selectEl.value = targetServer;
                     }
                     showStreamStatus(`⚡ Database Match: [${detectedInfo.label}] — Auto Extracting & Playing…`, 4000);
+                } else {
+                    targetServer = "vidzee";
+                    currentServer = targetServer;
+                    const selectEl = document.getElementById('server-select');
+                    if (selectEl) {
+                        selectEl.value = "vidzee";
+                    }
+                    showStreamStatus(`⚡ Auto Playing via Vidzee…`, 3000);
                 }
             } else {
-                showStreamStatus(`Playing stream via ${currentServer.replace('_', ' ').toUpperCase()}…`, 2000);
+                // If not matched with .json database, auto open with Vidzee player
+                targetServer = "vidzee";
+                currentServer = targetServer;
+                const selectEl = document.getElementById('server-select');
+                if (selectEl) {
+                    selectEl.value = "vidzee";
+                }
+                showStreamStatus(`⚡ Auto Playing via Vidzee…`, 3000);
             }
 
             // Load iframe server embed or stream
@@ -2199,7 +2214,7 @@
             }
 
             // 6. TMDB & DB Direct Server URL Providers
-            const provider = SERVER_PROVIDERS[serverKey] || SERVER_PROVIDERS['voe_worker'] || SERVER_PROVIDERS['primesrc'];
+            const provider = SERVER_PROVIDERS[serverKey] || SERVER_PROVIDERS['vidzee'] || SERVER_PROVIDERS['primesrc'];
             const url = provider(tmdbId, imdbId);
             frame.src = url;
         }
