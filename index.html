@@ -174,35 +174,77 @@
         /* Search */
         #search-wrap {
             flex: 1;
-            max-width: 480px;
+            max-width: 540px;
             position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg3);
+            border: 1px solid var(--border2);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all var(--trans);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            background: var(--bg4);
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, .2);
+        }
+
+        #search-filter-select {
+            height: 38px;
+            padding: 0 10px 0 14px;
+            background: transparent;
+            border: none;
+            border-right: 1px solid var(--border2);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: color var(--trans);
+        }
+
+        #search-filter-select:hover {
+            color: var(--accent);
+        }
+
+        #search-filter-select option {
+            background: var(--bg2);
+            color: var(--text);
+            font-weight: 600;
+            padding: 6px;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            min-width: 0;
         }
 
         #search-inp {
             width: 100%;
-            padding: 10px 16px 10px 42px;
-            background: var(--bg3);
-            border: 1px solid var(--border2);
-            border-radius: 24px;
+            padding: 10px 14px 10px 36px;
+            background: transparent;
+            border: none;
             color: var(--text);
             font-size: 13.5px;
             outline: none;
-            transition: all var(--trans);
         }
 
         #search-inp::placeholder {
             color: var(--text3);
         }
 
-        #search-inp:focus {
-            border-color: var(--accent);
-            background: var(--bg4);
-            box-shadow: 0 0 0 3px rgba(229, 9, 20, .2);
-        }
-
         .search-icon {
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text3);
@@ -1196,13 +1238,22 @@
         <nav id="navbar">
             <div class="logo" onclick="goHome()">Cine<span>STREAM</span></div>
             <div id="search-wrap">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                </svg>
-                <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…"
-                    autocomplete="off">
+                <div class="search-box">
+                    <select id="search-filter-select" onchange="onSearchFilterChange()" aria-label="Search Filter">
+                        <option value="all" selected>All</option>
+                        <option value="hollywood">Hollywood</option>
+                        <option value="bollywood">Bollywood</option>
+                    </select>
+                    <div class="search-input-wrap">
+                        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                        <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…"
+                            autocomplete="off">
+                    </div>
+                </div>
                 <div id="search-dropdown"></div>
             </div>
             <div class="nav-links">
@@ -2002,32 +2053,128 @@
         }
 
         // ═══════════════════════════════════════════════════════════
-        //  SEARCH
+        //  SEARCH & CATEGORY FILTERS
         // ═══════════════════════════════════════════════════════════
+        function parseQueryAndYear(rawQuery) {
+            const trimmed = (rawQuery || '').trim();
+            // Match 4-digit release year between 1900 and 2099
+            const yearMatch = trimmed.match(/\b(19\d\d|20\d\d)\b/);
+            if (yearMatch) {
+                const year = yearMatch[1];
+                const cleanTitle = trimmed
+                    .replace(new RegExp('[\\(\\[]?\\s*' + year + '\\s*[\\)\\]]?', 'g'), '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                
+                if (cleanTitle.length > 0) {
+                    return { query: cleanTitle, year: year };
+                }
+            }
+            return { query: trimmed, year: null };
+        }
+
+        function onSearchFilterChange() {
+            const filterSelect = document.getElementById('search-filter-select');
+            const filter = filterSelect ? filterSelect.value : 'all';
+            const input = document.getElementById('search-inp');
+            if (!input) return;
+
+            if (filter === 'bollywood') {
+                input.placeholder = "Search Bollywood movies by title, actor…";
+            } else if (filter === 'hollywood') {
+                input.placeholder = "Search Hollywood movies by title, actor…";
+            } else {
+                input.placeholder = "Search movies by title, actor, or genre…";
+            }
+
+            if (input.value.trim()) {
+                input.dispatchEvent(new Event('input'));
+            }
+        }
+
         function setupSearch() {
             const input = document.getElementById('search-inp');
+            const filterSelect = document.getElementById('search-filter-select');
             const dropdown = document.getElementById('search-dropdown');
             let debounceTimer = null;
 
             input.addEventListener('input', () => {
                 clearTimeout(debounceTimer);
-                const query = input.value.trim();
+                const rawQuery = input.value.trim();
+                const filter = filterSelect ? filterSelect.value : 'all';
 
-                if (!query) {
+                if (!rawQuery) {
                     dropdown.classList.remove('show');
                     dropdown.innerHTML = '';
                     return;
                 }
 
                 debounceTimer = setTimeout(async () => {
-                    const data = await fetchTMDB('/search/movie', { query });
-                    if (!data || !data.results || data.results.length === 0) {
-                        dropdown.innerHTML = `<div style="padding:14px; color:var(--text3); font-size:13px;">No movies found for "${query}"</div>`;
+                    const { query, year } = parseQueryAndYear(rawQuery);
+                    const indianLangs = ['hi', 'te', 'ta', 'ml', 'kn', 'bn', 'pa', 'mr', 'gu', 'ur', 'or', 'as', 'ne', 'sa'];
+                    const hollywoodLangs = ['en'];
+
+                    const pages = (filter === 'all' && !year) ? [1] : [1, 2, 3];
+                    const promises = [];
+
+                    // If year is detected (e.g. "the train 2007"), query TMDB with year filter
+                    if (year) {
+                        pages.forEach(p => {
+                            promises.push(fetchTMDB('/search/movie', { query, primary_release_year: year, page: p }));
+                            promises.push(fetchTMDB('/search/movie', { query, year: year, page: p }));
+                        });
+                    }
+                    // Also include base query
+                    pages.forEach(p => {
+                        promises.push(fetchTMDB('/search/movie', { query, page: p }));
+                    });
+
+                    const responses = await Promise.all(promises);
+
+                    let combined = [];
+                    responses.forEach(r => {
+                        if (r && Array.isArray(r.results)) combined.push(...r.results);
+                    });
+
+                    let filtered = combined;
+                    if (filter === 'bollywood') {
+                        filtered = combined.filter(m => indianLangs.includes(m.original_language) || (m.origin_country && m.origin_country.includes('IN')));
+                    } else if (filter === 'hollywood') {
+                        filtered = combined.filter(m => hollywoodLangs.includes(m.original_language) || (m.origin_country && (m.origin_country.includes('US') || m.origin_country.includes('GB') || m.origin_country.includes('CA'))));
+                    }
+
+                    // Score and rank exact/close matches and exact year matches at the top
+                    const uniqueMap = new Map();
+                    for (const m of filtered) {
+                        if (!uniqueMap.has(m.id)) {
+                            const mYear = (m.release_date || '').split('-')[0];
+                            let score = m.popularity || 0;
+                            if (year && mYear === year) {
+                                score += 1000; // Strong boost for exact year match
+                            }
+                            const qLower = query.toLowerCase();
+                            const tLower = (m.title || m.original_title || '').toLowerCase();
+                            if (tLower === qLower) {
+                                score += 500; // Boost exact title
+                            } else if (tLower.startsWith(qLower)) {
+                                score += 200;
+                            }
+                            uniqueMap.set(m.id, { movie: m, score });
+                        }
+                    }
+
+                    const unique = Array.from(uniqueMap.values())
+                        .sort((a, b) => b.score - a.score)
+                        .map(x => x.movie);
+
+                    if (unique.length === 0) {
+                        const filterLabel = filter === 'bollywood' ? 'Bollywood' : (filter === 'hollywood' ? 'Hollywood' : '');
+                        dropdown.innerHTML = `<div style="padding:14px; color:var(--text3); font-size:13px;">No ${filterLabel} movies found for "${rawQuery}"</div>`;
                         dropdown.classList.add('show');
                         return;
                     }
 
-                    dropdown.innerHTML = data.results.slice(0, 8).map(m => {
+                    dropdown.innerHTML = unique.slice(0, 8).map(m => {
                         const poster = m.poster_path ? `${TMDB_IMG_W342}${m.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster';
                         const year = (m.release_date || '').split('-')[0] || 'N/A';
                         const score = m.vote_average ? m.vote_average.toFixed(1) : 'NR';
@@ -2037,6 +2184,7 @@
                             const dInfo = detectServerFromDbItem(dbMatch);
                             dbBadge = `<span style="background:rgba(229,9,20,0.22); color:var(--accent); font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(229,9,20,0.35);">⚡ ${dInfo ? dInfo.label : 'DB Stream'}</span>`;
                         }
+                        const langBadge = (m.original_language && m.original_language !== 'en') ? `<span style="background:var(--bg4); color:var(--text2); font-size:9.5px; padding:1px 5px; border-radius:3px; text-transform:uppercase; font-weight:700;">${m.original_language}</span>` : '';
                         return `
                             <div class="sd-item" onclick="playMovie(${m.id}); document.getElementById('search-dropdown').classList.remove('show');">
                                 <img class="sd-img" src="${poster}" alt="${m.title}">
@@ -2044,6 +2192,7 @@
                                     <div class="sd-title">${m.title} ${dbBadge}</div>
                                     <div class="sd-meta">
                                         <span>${year}</span>
+                                        ${langBadge}
                                         <span class="sd-score">★ ${score}</span>
                                     </div>
                                 </div>
