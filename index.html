@@ -1314,8 +1314,12 @@
                             <option value="streamwish">Streamwish.to (Render API)</option>
                             <option value="luluvdoo">Luluvdoo.com (Render API)</option>
                             <option value="filelions">Filelions.to (Worker Extractor)</option>
+                            <option value="vidnest">VidNest.io (Direct Player)</option>
+                            <option value="streamplay">StreamPlay.to (Direct Player)</option>
+                            <option value="upzur">Upzur.com (Direct Player)</option>
                             <option value="vidmoly">VidMoly (Ad-Shield)</option>
                             <option value="youtube">YouTube Player</option>
+                            <option value="direct_embed">Direct DB Stream (Archive / Dailymotion / Vimeo / SaveFiles)</option>
                         </optgroup>
                         <optgroup label="🌐 Global Multi-Stream Providers">
                             <option value="vidking">VidKing Stream (HLS Direct)</option>
@@ -1413,6 +1417,9 @@
             streamwish: (id) => `https://streamwish.onrender.com/api/${id}`,
             luluvdoo: (id) => `https://luluvdoo.onrender.com/api/${id}`,
             filelions: (id) => `https://filelions-to-callister.ytbro8326.workers.dev/${id}`,
+            vidnest: (id) => `https://vidnest.io/e/${id}`,
+            streamplay: (id) => `https://streamplay.to/embed-${id}.html`,
+            upzur: (id) => `https://upzur.com/embed-${id}.html`,
             vidmoly: (id) => `https://vidmoly.biz/embed-${id}.html`,
             youtube: (id) => `https://www.youtube.com/embed/${id}`,
 
@@ -1540,7 +1547,16 @@
                     if (lower.includes("luluvdoo.") || lower.includes("lulustream") || lower.includes("luluvid")) {
                         return { serverKey: "luluvdoo", domain: "luluvdoo.com", rawUrl: url, label: "Luluvdoo.com" };
                     }
-                    if (lower.includes("filelions.") || lower.includes("callistanise") || lower.includes("vidhide") || lower.includes("vidnest.")) {
+                    if (lower.includes("vidnest.")) {
+                        return { serverKey: "vidnest", domain: "vidnest.io", rawUrl: url, label: "VidNest.io" };
+                    }
+                    if (lower.includes("streamplay.")) {
+                        return { serverKey: "streamplay", domain: "streamplay.to", rawUrl: url, label: "StreamPlay.to" };
+                    }
+                    if (lower.includes("upzur.")) {
+                        return { serverKey: "upzur", domain: "upzur.com", rawUrl: url, label: "Upzur.com" };
+                    }
+                    if (lower.includes("filelions.") || lower.includes("callistanise") || lower.includes("vidhide")) {
                         return { serverKey: "filelions", domain: "filelions.to", rawUrl: url, label: "Filelions.to" };
                     }
                     if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
@@ -2145,9 +2161,16 @@
                 }
             }
 
-            // 4. Other Direct Embeds (Vimeo, Dailymotion, Archive.org, SaveFiles, etc.)
-            if (serverKey === 'direct_embed' && detectedDbInfo && detectedDbInfo.rawUrl) {
+            // 4. Direct Embeds (VidNest, StreamPlay, Upzur, Vimeo, Dailymotion, Archive.org, SaveFiles, etc.)
+            const isDirectEmbed = serverKey === 'direct_embed' ||
+                                  serverKey === 'vidnest' ||
+                                  serverKey === 'streamplay' ||
+                                  serverKey === 'upzur' ||
+                                  (detectedDbInfo && ['vidnest.io', 'streamplay.to', 'upzur.com', 'dailymotion.com', 'vimeo.com', 'archive.org', 'savefiles.com'].includes(detectedDbInfo.domain));
+
+            if (isDirectEmbed && detectedDbInfo && detectedDbInfo.rawUrl) {
                 frame.src = detectedDbInfo.rawUrl;
+                showStreamStatus(`▶ Playing ${detectedDbInfo.label || 'Stream'}`, 3000);
                 return;
             }
 
@@ -2184,7 +2207,17 @@
         async function changeServer(serverKey) {
             currentServer = serverKey;
             if (currentMovie) {
-                await updatePlayerIframe(currentMovie, currentServer);
+                let detectedInfo = null;
+                const tmdbStr = String(currentMovie.id);
+                let matchedItem = dbByTmdb.get(tmdbStr);
+                const imdbStr = (currentMovie.imdb_id || (currentMovie.external_ids && currentMovie.external_ids.imdb_id) || '').trim().toLowerCase();
+                if (!matchedItem && imdbStr) {
+                    matchedItem = dbByImdb.get(imdbStr);
+                }
+                if (matchedItem) {
+                    detectedInfo = detectServerFromDbItem(matchedItem);
+                }
+                await updatePlayerIframe(currentMovie, currentServer, detectedInfo);
             }
         }
 
