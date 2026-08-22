@@ -52,14 +52,6 @@
         }
 
         #root {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #root {
             position: relative;
             width: 100vw;
             height: 100vh;
@@ -1520,62 +1512,100 @@
         // ═══════════════════════════════════════════════════════════
         //  DATABASE CACHE & TMDB / IMDB LOOKUP
         // ═══════════════════════════════════════════════════════════
+        // ── SECURE CONFIG ── Replace with your actual Worker URL and secret key
+        const DB_WORKER_URL = "https://github-privvvate-token.ytbro8326.workers.dev/";
+        const DB_SECRET_KEY = "cine2026xstream";
+        const DB_CACHE_KEY  = "cinestream_db_cache";
+        const DB_CACHE_TTL  = 6 * 60 * 60 * 1000; // 6 hours in ms
+
         let customDbLoaded = false;
         let dbLoadingPromise = null;
-        const dbByTmdb = new Map();
-        const dbByImdb = new Map();
+        const dbByTmdb   = new Map();
+        const dbByImdb   = new Map();
         const dbBySerial = new Map();
+
+        function indexDbData(data) {
+            data.forEach(item => {
+                if (!item) return;
+                const ti    = String(item["tmdb/imdb"] || "").trim();
+                const parts = ti.split("/");
+                const p0    = (parts[0] || "").trim();
+                const p1    = (parts[1] || "").trim().toLowerCase();
+
+                if (p0.startsWith("tt"))      dbByImdb.set(p0.toLowerCase(), item);
+                else if (p0)                   dbByTmdb.set(p0, item);
+
+                if (p1.startsWith("tt"))       dbByImdb.set(p1.toLowerCase(), item);
+                else if (p1)                   dbByTmdb.set(p1, item);
+
+                if (item.serial)               dbBySerial.set(String(item.serial), item);
+            });
+        }
 
         async function loadCustomDatabase() {
             if (customDbLoaded) return true;
             if (dbLoadingPromise) return dbLoadingPromise;
 
             dbLoadingPromise = (async () => {
-                const candidatePaths = [
-                    "https://raw.githubusercontent.com/ytbro8326-sudo/primesrc_single_flaresolver/refs/heads/main/custom_merged_data.json",
-                    "https://cdn.jsdelivr.net/gh/ytbro8326-sudo/primesrc_single_flaresolver@main/custom_merged_data.json",
-                    "../custom_merged_data.json",
-                    "./custom_merged_data.json",
-                    "custom_merged_data.json"
-                ];
+                // ── 1. Try sessionStorage cache first (avoids re-fetching on every page open) ──
+                try {
+                    const cached = sessionStorage.getItem(DB_CACHE_KEY);
+                    if (cached) {
+                        const { ts, data } = JSON.parse(cached);
+                        if (Date.now() - ts < DB_CACHE_TTL && Array.isArray(data) && data.length > 0) {
+                            indexDbData(data);
+                            customDbLoaded = true;
+                            console.log(`DB loaded from cache: ${data.length} entries`);
+                            return true;
+                        }
+                    }
+                } catch (e) { /* sessionStorage unavailable — continue */ }
 
-                for (const path of candidatePaths) {
+                // ── 2. Fetch from secure Cloudflare Worker (private GitHub repo) ──
+                const MAX_RETRIES = 3;
+                for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
                     try {
-                        const res = await fetch(path);
-                        if (!res.ok) continue;
+                        const controller = new AbortController();
+                        const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
+                        const res = await fetch(DB_WORKER_URL, {
+                            headers: { "X-Secret-Key": DB_SECRET_KEY },
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeout);
+
+                        if (!res.ok) {
+                            console.warn(`DB Worker returned HTTP ${res.status} (attempt ${attempt})`);
+                            if (res.status === 403) break; // Wrong key — no point retrying
+                            continue;
+                        }
+
                         const data = await res.json();
                         if (Array.isArray(data) && data.length > 0) {
-                            data.forEach(item => {
-                                if (!item) return;
-                                const ti = String(item["tmdb/imdb"] || "").trim();
-                                const parts = ti.split("/");
-                                const p0 = (parts[0] || "").trim();
-                                const p1 = (parts[1] || "").trim().toLowerCase();
-
-                                if (p0.startsWith("tt")) {
-                                    dbByImdb.set(p0.toLowerCase(), item);
-                                } else if (p0) {
-                                    dbByTmdb.set(p0, item);
-                                }
-
-                                if (p1.startsWith("tt")) {
-                                    dbByImdb.set(p1.toLowerCase(), item);
-                                } else if (p1) {
-                                    dbByTmdb.set(p1, item);
-                                }
-
-                                if (item.serial) {
-                                    dbBySerial.set(String(item.serial), item);
-                                }
-                            });
+                            indexDbData(data);
                             customDbLoaded = true;
-                            console.log(`Successfully loaded & indexed ${data.length} database movies from ${path}`);
+                            console.log(`DB loaded from Worker: ${data.length} entries`);
+
+                            // Save to sessionStorage cache
+                            try {
+                                sessionStorage.setItem(DB_CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+                            } catch (e) { /* storage full or unavailable */ }
+
                             return true;
                         }
                     } catch (e) {
-                        console.warn(`Could not load database from ${path}:`, e);
+                        if (e.name === 'AbortError') {
+                            console.warn(`DB fetch timed out (attempt ${attempt})`);
+                        } else {
+                            console.warn(`DB fetch error (attempt ${attempt}):`, e);
+                        }
+                        if (attempt < MAX_RETRIES) {
+                            await new Promise(r => setTimeout(r, 1000 * attempt)); // backoff: 1s, 2s
+                        }
                     }
                 }
+
+                console.error("Could not load database from Worker after retries.");
                 return false;
             })();
 
@@ -1902,7 +1932,7 @@
             }
 
             document.getElementById('hero-title').textContent = movie.title || movie.original_title;
-            document.getElementById('hero-desc').textContent = movie.overview || "Stream this blockbluster movie now in high definition.";
+            document.getElementById('hero-desc').textContent = movie.overview || "Stream this blockbuster movie now in high definition.";
 
             const year = (movie.release_date || '').split('-')[0] || '2025';
             const score = (movie.vote_average || 0).toFixed(1);
@@ -1951,15 +1981,16 @@
 
         // ── Movie Card HTML ──
         function createMovieCardHTML(movie) {
-            const poster = movie.poster_path ? `${TMDB_IMG_W342}${movie.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster';
+            const poster = movie.poster_path ? `${TMDB_IMG_W342}${movie.poster_path}` : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342' height='513' viewBox='0 0 342 513'%3E%3Crect width='342' height='513' fill='%231c1c30'/%3E%3Ctext x='50%25' y='50%25' fill='%2360667e' font-family='Inter,sans-serif' font-size='14' text-anchor='middle' dominant-baseline='middle'%3ENo Poster%3C/text%3E%3C/svg%3E`;
             const year = (movie.release_date || '').split('-')[0] || '';
             const score = movie.vote_average ? movie.vote_average.toFixed(1) : 'NR';
-            const title = (movie.title || movie.original_title || '').replace(/'/g, "\\'");
+            const title = (movie.title || movie.original_title || '');
+            const safeTitle = title.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
             return `
-                <div class="movie-card" onclick="playMovie(${movie.id})">
+                <div class="movie-card" data-id="${movie.id}" onclick="playMovie(this.dataset.id)">
                     <div class="card-poster">
-                        <img src="${poster}" alt="${title}" loading="lazy">
+                        <img src="${poster}" alt="${safeTitle}" loading="lazy" onerror="this.src=this.src.includes('data:')? this.src : \`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342' height='513'%3E%3Crect width='342' height='513' fill='%231c1c30'/%3E%3Ctext x='50%25' y='50%25' fill='%2360667e' font-family='sans-serif' font-size='14' text-anchor='middle' dominant-baseline='middle'%3ENo Poster%3C/text%3E%3C/svg%3E\`">
                         <div class="card-score">★ ${score}</div>
                         <div class="card-quality">HD</div>
                         <div class="card-year">${year}</div>
@@ -1972,7 +2003,7 @@
                         </div>
                     </div>
                     <div class="card-info">
-                        <div class="card-title">${movie.title || movie.original_title}</div>
+                        <div class="card-title">${safeTitle}</div>
                         <div class="card-sub">
                             <span>Movie</span>
                             <span>${year}</span>
@@ -2175,7 +2206,7 @@
                     }
 
                     dropdown.innerHTML = unique.slice(0, 8).map(m => {
-                        const poster = m.poster_path ? `${TMDB_IMG_W342}${m.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster';
+                        const poster = m.poster_path ? `${TMDB_IMG_W342}${m.poster_path}` : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342' height='513' viewBox='0 0 342 513'%3E%3Crect width='342' height='513' fill='%231c1c30'/%3E%3Ctext x='50%25' y='50%25' fill='%2360667e' font-family='Inter,sans-serif' font-size='14' text-anchor='middle' dominant-baseline='middle'%3ENo Poster%3C/text%3E%3C/svg%3E`;
                         const year = (m.release_date || '').split('-')[0] || 'N/A';
                         const score = m.vote_average ? m.vote_average.toFixed(1) : 'NR';
                         const dbMatch = dbByTmdb.get(String(m.id));
