@@ -59,6 +59,22 @@
             position: relative;
         }
 
+        #root {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+
         /* ── VIEWS ── */
         #view-home,
         #view-player {
@@ -114,15 +130,14 @@
 
         /* ══════════ NAVBAR ══════════ */
         #navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: relative;
+            z-index: 1000;
             display: flex;
             align-items: center;
             gap: 16px;
             padding: 0 28px;
             height: 64px;
-            background: rgba(7, 7, 13, .92);
+            background: rgba(7, 7, 13, .96);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(16px);
             flex-shrink: 0;
@@ -1177,201 +1192,216 @@
 <body>
     <div id="root">
 
-        <!-- ══════════ HOME VIEW ══════════ -->
-        <div id="view-home">
-            <!-- Navbar -->
-            <nav id="navbar">
-                <div class="logo" onclick="goHome()">Cine<span>STREAM</span></div>
-                <div id="search-wrap">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…"
-                        autocomplete="off">
-                    <div id="search-dropdown"></div>
-                </div>
-                <div class="nav-links">
-                    <button class="nav-btn active" onclick="loadSection('popular', this)">Popular</button>
-                    <button class="nav-btn" onclick="loadSection('top_rated', this)">Top Rated</button>
-                    <button class="nav-btn" onclick="loadSection('now_playing', this)">In Theatres</button>
-                    <button class="nav-btn" onclick="loadSection('bollywood', this)">Bollywood</button>
-                </div>
-            </nav>
+        <!-- ══════════ PERSISTENT GLOBAL NAVBAR ══════════ -->
+        <nav id="navbar">
+            <div class="logo" onclick="goHome()">Cine<span>STREAM</span></div>
+            <div id="search-wrap">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…"
+                    autocomplete="off">
+                <div id="search-dropdown"></div>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="loadSection('popular', this)">Popular</button>
+                <button class="nav-btn" onclick="loadSection('hollywood', this)">Hollywood</button>
+                <button class="nav-btn" onclick="loadSection('bollywood', this)">Bollywood</button>
+                <button class="nav-btn" onclick="loadSection('top_rated', this)">Top Rated</button>
+                <button class="nav-btn" onclick="loadSection('now_playing', this)">In Theatres</button>
+            </div>
+        </nav>
 
-            <!-- Hero Banner -->
-            <section id="hero">
-                <div id="hero-bg"></div>
-                <div id="hero-overlay"></div>
-                <div id="hero-content">
-                    <div class="hero-badge">✦ Featured Movie</div>
-                    <div id="hero-title">Loading Featured Movie…</div>
-                    <div id="hero-meta" class="hero-meta"></div>
-                    <div id="hero-desc"></div>
-                    <div id="hero-actions">
-                        <button class="hero-btn hero-btn-primary" id="hero-play-btn" onclick="heroPlay()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                            Watch Movie Now
-                        </button>
-                        <button class="hero-btn hero-btn-secondary" id="hero-info-btn">Details & Info</button>
+        <!-- ══════════ MAIN CONTENT CONTAINER ══════════ -->
+        <div id="main-container">
+
+            <!-- ══════════ HOME VIEW ══════════ -->
+            <div id="view-home">
+                <!-- Hero Banner -->
+                <section id="hero">
+                    <div id="hero-bg"></div>
+                    <div id="hero-overlay"></div>
+                    <div id="hero-content">
+                        <div class="hero-badge">✦ Featured Movie</div>
+                        <div id="hero-title">Loading Featured Movie…</div>
+                        <div id="hero-meta" class="hero-meta"></div>
+                        <div id="hero-desc"></div>
+                        <div id="hero-actions">
+                            <button class="hero-btn hero-btn-primary" id="hero-play-btn" onclick="heroPlay()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                Watch Movie Now
+                            </button>
+                            <button class="hero-btn hero-btn-secondary" id="hero-info-btn">Details & Info</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Genre bar -->
+                <div id="genre-bar">
+                    <button class="genre-pill active" onclick="filterGenre(null, this)">All Genres</button>
+                    <button class="genre-pill" onclick="filterGenre(28, this)">Action</button>
+                    <button class="genre-pill" onclick="filterGenre(12, this)">Adventure</button>
+                    <button class="genre-pill" onclick="filterGenre(16, this)">Animation</button>
+                    <button class="genre-pill" onclick="filterGenre(35, this)">Comedy</button>
+                    <button class="genre-pill" onclick="filterGenre(80, this)">Crime</button>
+                    <button class="genre-pill" onclick="filterGenre(18, this)">Drama</button>
+                    <button class="genre-pill" onclick="filterGenre(14, this)">Fantasy</button>
+                    <button class="genre-pill" onclick="filterGenre(27, this)">Horror</button>
+                    <button class="genre-pill" onclick="filterGenre(9648, this)">Mystery</button>
+                    <button class="genre-pill" onclick="filterGenre(10749, this)">Romance</button>
+                    <button class="genre-pill" onclick="filterGenre(878, this)">Sci-Fi</button>
+                    <button class="genre-pill" onclick="filterGenre(53, this)">Thriller</button>
+                </div>
+
+                <!-- Trending / Now Playing Row -->
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-title"><span class="dot"></span> In Theatres & Trending</div>
+                        <span class="see-all" onclick="loadSection('now_playing')">Explore more →</span>
+                    </div>
+                </section>
+                <div class="h-scroll-wrap">
+                    <div class="h-scroll" id="trending-row"></div>
+                </div>
+
+                <!-- Hollywood Blockbusters Row -->
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-title"><span class="dot" style="background:var(--accent)"></span> Hollywood Blockbusters</div>
+                        <span class="see-all" onclick="loadSection('hollywood')">Explore more →</span>
+                    </div>
+                </section>
+                <div class="h-scroll-wrap">
+                    <div class="h-scroll" id="hollywood-row"></div>
+                </div>
+
+                <!-- Bollywood & Indian Hits Row -->
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-title"><span class="dot" style="background:var(--cyan)"></span> Bollywood & Indian Cinema</div>
+                        <span class="see-all" onclick="loadSection('bollywood')">Explore more →</span>
+                    </div>
+                </section>
+                <div class="h-scroll-wrap">
+                    <div class="h-scroll" id="bollywood-row"></div>
+                </div>
+
+                <!-- Top Rated Movies Row -->
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-title"><span class="dot" style="background:var(--gold)"></span> Highest Rated Movies</div>
+                        <span class="see-all" onclick="loadSection('top_rated')">Explore more →</span>
+                    </div>
+                </section>
+                <div class="h-scroll-wrap">
+                    <div class="h-scroll" id="top-row"></div>
+                </div>
+
+                <!-- Popular Movies Grid -->
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-title" id="grid-header-title"><span class="dot"
+                                style="background:var(--accent2)"></span> Popular Movies</div>
+                        <span class="see-all" onclick="loadSection('popular')">Refresh →</span>
+                    </div>
+                    <div class="movie-grid" id="popular-grid"></div>
+                </section>
+
+                <div style="height:60px"></div>
+            </div><!-- /view-home -->
+
+
+            <!-- ══════════ MOVIE PLAYER VIEW ══════════ -->
+            <div id="view-player">
+                <!-- Player Top Bar -->
+                <div id="player-topbar">
+                    <button id="back-btn" onclick="closePlayer()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        Back to Movies
+                    </button>
+                    <div id="player-movie-info">
+                        <div id="player-title">Movie Title</div>
+                        <div id="player-meta-badge">2025 • HD</div>
+                    </div>
+                    <div id="server-selector-wrap">
+                        <span class="server-label">Server:</span>
+                        <select id="server-select" onchange="changeServer(this.value)">
+                            <optgroup label="⚡ Database Auto-Extract Servers">
+                                <option value="voe_worker" selected>VOE.sx Player (Fast Worker)</option>
+                                <option value="dood">Dood.watch (Render API)</option>
+                                <option value="bysejikuar">Bysejikuar.com (Render API)</option>
+                                <option value="mixdrop">Mixdrop.ag (Render API)</option>
+                                <option value="streamta">Streamta.site (Render API)</option>
+                                <option value="streamwish">Streamwish.to (Render API)</option>
+                                <option value="luluvdoo">Luluvdoo.com (Render API)</option>
+                                <option value="filelions">Filelions.to (Worker Extractor)</option>
+                                <option value="vidnest">VidNest.io (Direct Player)</option>
+                                <option value="streamplay">StreamPlay.to (Direct Player)</option>
+                                <option value="upzur">Upzur.com (Direct Player)</option>
+                                <option value="vidmoly">VidMoly (Ad-Shield)</option>
+                                <option value="youtube">YouTube Player</option>
+                                <option value="direct_embed">Direct DB Stream (Archive / Dailymotion / Vimeo / SaveFiles)</option>
+                            </optgroup>
+                            <optgroup label="🌐 Global Multi-Stream Providers">
+                                <option value="vidking">VidKing Stream (HLS Direct)</option>
+                                <option value="vidzee">Vidzee (Ad-Shield Fast)</option>
+                                <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
+                                <option value="gemma">Gemma Player (IMDb Server)</option>
+                                <option value="insertunit">InsertUnit (IMDb Server)</option>
+                                <option value="primesrc">PrimeSrc (Fast HD)</option>
+                                <option value="vidsrc_to">VidSrc.to</option>
+                                <option value="vidsrc_icu">VidSrc.icu</option>
+                                <option value="autoembed">AutoEmbed</option>
+                                <option value="smashy">SmashyStream</option>
+                                <option value="moviesapi">MoviesAPI</option>
+                            </optgroup>
+                        </select>
+                        <select id="vidking-quality-select"
+                            style="display:none; padding:8px 12px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-size:12px; font-weight:600; outline:none; cursor:pointer;"
+                            onchange="switchVidkingQuality(this.value)"></select>
                     </div>
                 </div>
-            </section>
 
-            <!-- Genre bar -->
-            <div id="genre-bar">
-                <button class="genre-pill active" onclick="filterGenre(null, this)">All Genres</button>
-                <button class="genre-pill" onclick="filterGenre(28, this)">Action</button>
-                <button class="genre-pill" onclick="filterGenre(12, this)">Adventure</button>
-                <button class="genre-pill" onclick="filterGenre(16, this)">Animation</button>
-                <button class="genre-pill" onclick="filterGenre(35, this)">Comedy</button>
-                <button class="genre-pill" onclick="filterGenre(80, this)">Crime</button>
-                <button class="genre-pill" onclick="filterGenre(18, this)">Drama</button>
-                <button class="genre-pill" onclick="filterGenre(14, this)">Fantasy</button>
-                <button class="genre-pill" onclick="filterGenre(27, this)">Horror</button>
-                <button class="genre-pill" onclick="filterGenre(9648, this)">Mystery</button>
-                <button class="genre-pill" onclick="filterGenre(10749, this)">Romance</button>
-                <button class="genre-pill" onclick="filterGenre(878, this)">Sci-Fi</button>
-                <button class="genre-pill" onclick="filterGenre(53, this)">Thriller</button>
-            </div>
-
-            <!-- Trending / Now Playing Row -->
-            <section class="section">
-                <div class="section-header">
-                    <div class="section-title"><span class="dot"></span> In Theatres & Trending</div>
-                    <span class="see-all" onclick="loadSection('now_playing')">Explore more →</span>
+                <!-- Player Video Frame & HTML5 HLS Video -->
+                <div id="player-main">
+                    <div id="stream-status"
+                        style="display:none; position:absolute; top:12px; right:12px; z-index:15; background:rgba(7,7,13,0.85); backdrop-filter:blur(8px); color:#fff; font-size:11.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--border2); font-weight:600;">
+                    </div>
+                    <iframe id="player-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
+                        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
+                    <video id="player-video" controls playsinline
+                        style="display:none; width:100%; height:100%; position:absolute; inset:0; background:#000; outline:none; z-index:5;"></video>
                 </div>
-            </section>
-            <div class="h-scroll-wrap">
-                <div class="h-scroll" id="trending-row"></div>
-            </div>
 
-            <!-- Top Rated Movies Row -->
-            <section class="section">
-                <div class="section-header">
-                    <div class="section-title"><span class="dot" style="background:var(--gold)"></span> Highest Rated
+                <!-- Details below player -->
+                <div id="player-details-row">
+                    <div class="player-info-title" id="p-info-title">Movie Details</div>
+                    <div class="player-info-overview" id="p-info-overview">Loading overview…</div>
+
+                    <div id="player-collection-container" style="display:none;">
+                        <div class="section-title" id="p-collection-title" style="font-size:15px; margin-bottom:12px;"><span
+                                class="dot" style="background:var(--gold)"></span> The Collection</div>
+                        <div class="h-scroll-wrap" style="padding:0 0 10px;">
+                            <div class="h-scroll" id="player-collection-row"></div>
+                        </div>
+                    </div>
+
+                    <div class="section-title" style="font-size:15px; margin-bottom:12px;"><span class="dot"></span> Similar
                         Movies</div>
-                    <span class="see-all" onclick="loadSection('top_rated')">Explore more →</span>
-                </div>
-            </section>
-            <div class="h-scroll-wrap">
-                <div class="h-scroll" id="top-row"></div>
-            </div>
-
-            <!-- Bollywood & Indian Hits Row -->
-            <section class="section">
-                <div class="section-header">
-                    <div class="section-title"><span class="dot" style="background:var(--cyan)"></span> Bollywood &
-                        Indian Cinema</div>
-                    <span class="see-all" onclick="loadSection('bollywood')">Explore more →</span>
-                </div>
-            </section>
-            <div class="h-scroll-wrap">
-                <div class="h-scroll" id="bollywood-row"></div>
-            </div>
-
-            <!-- Popular Movies Grid -->
-            <section class="section">
-                <div class="section-header">
-                    <div class="section-title" id="grid-header-title"><span class="dot"
-                            style="background:var(--accent2)"></span> Popular Movies</div>
-                    <span class="see-all" onclick="loadSection('popular')">Refresh →</span>
-                </div>
-                <div class="movie-grid" id="popular-grid"></div>
-            </section>
-
-            <div style="height:60px"></div>
-        </div><!-- /view-home -->
-
-
-        <!-- ══════════ MOVIE PLAYER VIEW ══════════ -->
-        <div id="view-player">
-            <!-- Player Top Bar -->
-            <div id="player-topbar">
-                <button id="back-btn" onclick="closePlayer()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    Back to Movies
-                </button>
-                <div id="player-movie-info">
-                    <div id="player-title">Movie Title</div>
-                    <div id="player-meta-badge">2025 • HD</div>
-                </div>
-                <div id="server-selector-wrap">
-                    <span class="server-label">Server:</span>
-                    <select id="server-select" onchange="changeServer(this.value)">
-                        <optgroup label="⚡ Database Auto-Extract Servers">
-                            <option value="voe_worker" selected>VOE.sx Player (Fast Worker)</option>
-                            <option value="dood">Dood.watch (Render API)</option>
-                            <option value="bysejikuar">Bysejikuar.com (Render API)</option>
-                            <option value="mixdrop">Mixdrop.ag (Render API)</option>
-                            <option value="streamta">Streamta.site (Render API)</option>
-                            <option value="streamwish">Streamwish.to (Render API)</option>
-                            <option value="luluvdoo">Luluvdoo.com (Render API)</option>
-                            <option value="filelions">Filelions.to (Worker Extractor)</option>
-                            <option value="vidnest">VidNest.io (Direct Player)</option>
-                            <option value="streamplay">StreamPlay.to (Direct Player)</option>
-                            <option value="upzur">Upzur.com (Direct Player)</option>
-                            <option value="vidmoly">VidMoly (Ad-Shield)</option>
-                            <option value="youtube">YouTube Player</option>
-                            <option value="direct_embed">Direct DB Stream (Archive / Dailymotion / Vimeo / SaveFiles)</option>
-                        </optgroup>
-                        <optgroup label="🌐 Global Multi-Stream Providers">
-                            <option value="vidking">VidKing Stream (HLS Direct)</option>
-                            <option value="vidzee">Vidzee (Ad-Shield Fast)</option>
-                            <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
-                            <option value="gemma">Gemma Player (IMDb Server)</option>
-                            <option value="insertunit">InsertUnit (IMDb Server)</option>
-                            <option value="primesrc">PrimeSrc (Fast HD)</option>
-                            <option value="vidsrc_to">VidSrc.to</option>
-                            <option value="vidsrc_icu">VidSrc.icu</option>
-                            <option value="autoembed">AutoEmbed</option>
-                            <option value="smashy">SmashyStream</option>
-                            <option value="moviesapi">MoviesAPI</option>
-                        </optgroup>
-                    </select>
-                    <select id="vidking-quality-select"
-                        style="display:none; padding:8px 12px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-size:12px; font-weight:600; outline:none; cursor:pointer;"
-                        onchange="switchVidkingQuality(this.value)"></select>
-                </div>
-            </div>
-
-            <!-- Player Video Frame & HTML5 HLS Video -->
-            <div id="player-main">
-                <div id="stream-status"
-                    style="display:none; position:absolute; top:12px; right:12px; z-index:15; background:rgba(7,7,13,0.85); backdrop-filter:blur(8px); color:#fff; font-size:11.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--border2); font-weight:600;">
-                </div>
-                <iframe id="player-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
-                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
-                <video id="player-video" controls playsinline
-                    style="display:none; width:100%; height:100%; position:absolute; inset:0; background:#000; outline:none; z-index:5;"></video>
-            </div>
-
-            <!-- Details below player -->
-            <div id="player-details-row">
-                <div class="player-info-title" id="p-info-title">Movie Details</div>
-                <div class="player-info-overview" id="p-info-overview">Loading overview…</div>
-
-                <div id="player-collection-container" style="display:none;">
-                    <div class="section-title" id="p-collection-title" style="font-size:15px; margin-bottom:12px;"><span
-                            class="dot" style="background:var(--gold)"></span> The Collection</div>
                     <div class="h-scroll-wrap" style="padding:0 0 10px;">
-                        <div class="h-scroll" id="player-collection-row"></div>
+                        <div class="h-scroll" id="player-similar-row"></div>
                     </div>
                 </div>
+            </div><!-- /view-player -->
 
-                <div class="section-title" style="font-size:15px; margin-bottom:12px;"><span class="dot"></span> Similar
-                    Movies</div>
-                <div class="h-scroll-wrap" style="padding:0 0 10px;">
-                    <div class="h-scroll" id="player-similar-row"></div>
-                </div>
-            </div>
-        </div><!-- /view-player -->
+        </div><!-- /main-container -->
 
     </div><!-- /root -->
 
@@ -1778,8 +1808,12 @@
             // Load Trending & In Theatres
             loadHorizontalList('/movie/now_playing', {}, 'trending-row');
 
-            // Load Top Rated
-            loadHorizontalList('/movie/top_rated', {}, 'top-row');
+            // Load Hollywood Blockbusters
+            loadHorizontalList('/discover/movie', {
+                with_origin_country: 'US',
+                with_original_language: 'en',
+                sort_by: 'popularity.desc'
+            }, 'hollywood-row');
 
             // Load Bollywood & Indian Cinema
             loadHorizontalList('/discover/movie', {
@@ -1787,6 +1821,9 @@
                 with_original_language: 'hi|te|ta|ml|kn|bn|pa|mr',
                 sort_by: 'popularity.desc'
             }, 'bollywood-row');
+
+            // Load Top Rated
+            loadHorizontalList('/movie/top_rated', {}, 'top-row');
 
             // Load Popular Grid
             loadMovieGrid('/movie/popular', {});
@@ -1896,9 +1933,21 @@
 
         // ── Section Tabs ──
         function loadSection(section, btn) {
+            // If player is open, return to home view
+            if (document.getElementById('view-player').classList.contains('active')) {
+                closePlayer();
+            }
+
             if (btn) {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${section}'`)) {
+                        document.querySelectorAll('.nav-btn').forEach(nb => nb.classList.remove('active'));
+                        b.classList.add('active');
+                    }
+                });
             }
 
             const headerTitle = document.getElementById('grid-header-title');
@@ -1906,12 +1955,13 @@
             if (section === 'popular') {
                 headerTitle.innerHTML = `<span class="dot" style="background:var(--accent2)"></span> Popular Movies`;
                 loadMovieGrid('/movie/popular', {});
-            } else if (section === 'top_rated') {
-                headerTitle.innerHTML = `<span class="dot" style="background:var(--gold)"></span> Highest Rated Movies`;
-                loadMovieGrid('/movie/top_rated', {});
-            } else if (section === 'now_playing') {
-                headerTitle.innerHTML = `<span class="dot" style="background:var(--accent)"></span> Now In Theatres`;
-                loadMovieGrid('/movie/now_playing', {});
+            } else if (section === 'hollywood') {
+                headerTitle.innerHTML = `<span class="dot" style="background:var(--accent)"></span> Hollywood Blockbusters`;
+                loadMovieGrid('/discover/movie', {
+                    with_origin_country: 'US',
+                    with_original_language: 'en',
+                    sort_by: 'popularity.desc'
+                });
             } else if (section === 'bollywood') {
                 headerTitle.innerHTML = `<span class="dot" style="background:var(--cyan)"></span> Bollywood & Indian Cinema`;
                 loadMovieGrid('/discover/movie', {
@@ -1919,10 +1969,19 @@
                     with_original_language: 'hi|te|ta|ml|kn|bn|pa|mr',
                     sort_by: 'popularity.desc'
                 });
+            } else if (section === 'top_rated') {
+                headerTitle.innerHTML = `<span class="dot" style="background:var(--gold)"></span> Highest Rated Movies`;
+                loadMovieGrid('/movie/top_rated', {});
+            } else if (section === 'now_playing') {
+                headerTitle.innerHTML = `<span class="dot" style="background:var(--accent)"></span> Now In Theatres`;
+                loadMovieGrid('/movie/now_playing', {});
             }
 
             // Scroll to grid
-            document.getElementById('popular-grid').scrollIntoView({ behavior: 'smooth' });
+            const gridHeader = document.getElementById('grid-header-title');
+            if (gridHeader) {
+                gridHeader.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // ── Genre Filter ──
