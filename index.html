@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineStreamX — Stream HD Movies Free</title>
-    <meta name="description" content="Watch high-definition movies online for free with multi-server streaming and instant TMDB discovery.">
+    <meta name="description"
+        content="Watch high-definition movies online for free with multi-server streaming and instant TMDB discovery.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -839,7 +840,10 @@
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
                 gap: 14px;
             }
-            .h-scroll .movie-card { width: 145px; }
+
+            .h-scroll .movie-card {
+                width: 145px;
+            }
         }
 
         /* ══════════ PLAYER MOBILE HEIGHT FIX ══════════ */
@@ -848,6 +852,7 @@
                 overflow-y: auto;
                 overflow-x: hidden;
             }
+
             #player-main {
                 flex-shrink: 0;
                 height: 56vw;
@@ -855,6 +860,7 @@
                 max-height: 340px;
                 position: relative;
             }
+
             #player-frame,
             #player-video {
                 position: absolute;
@@ -866,6 +872,7 @@
 
         /* ══════════ RESPONSIVE — MOBILE ══════════ */
         @media (max-width: 768px) {
+
             /* Navbar */
             #navbar {
                 padding: 0 12px;
@@ -876,12 +883,18 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
-            .logo { font-size: 17px; flex-shrink: 0; }
+
+            .logo {
+                font-size: 17px;
+                flex-shrink: 0;
+            }
+
             #search-wrap {
                 order: 3;
                 flex: 1 1 100%;
                 max-width: 100%;
             }
+
             .nav-links {
                 order: 2;
                 overflow-x: auto;
@@ -890,17 +903,25 @@
                 flex-wrap: nowrap;
                 width: 100%;
             }
-            .nav-links::-webkit-scrollbar { display: none; }
+
+            .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+
             .nav-btn {
                 padding: 5px 11px;
                 font-size: 11px;
                 flex-shrink: 0;
             }
+
             #search-inp {
                 font-size: 13px;
                 padding: 9px 14px 9px 38px;
             }
-            #search-dropdown { max-height: 320px; }
+
+            #search-dropdown {
+                max-height: 320px;
+            }
 
             /* Hero */
             #hero {
@@ -908,38 +929,118 @@
                 min-height: 300px;
                 align-items: flex-end;
             }
-            #hero-title { font-size: 20px; line-height: 1.2; }
-            #hero-desc { font-size: 12px; -webkit-line-clamp: 2; margin-bottom: 14px; }
-            #hero-meta { gap: 8px; margin-bottom: 10px; }
-            .hero-score { font-size: 12px; }
-            .hero-tag, .hero-year { font-size: 10.5px; }
-            #hero-actions { gap: 8px; }
-            .hero-btn { padding: 10px 18px; font-size: 12.5px; gap: 6px; border-radius: 10px; }
-            .hero-badge { font-size: 10px; padding: 4px 10px; margin-bottom: 10px; }
+
+            #hero-title {
+                font-size: 20px;
+                line-height: 1.2;
+            }
+
+            #hero-desc {
+                font-size: 12px;
+                -webkit-line-clamp: 2;
+                margin-bottom: 14px;
+            }
+
+            #hero-meta {
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+
+            .hero-score {
+                font-size: 12px;
+            }
+
+            .hero-tag,
+            .hero-year {
+                font-size: 10.5px;
+            }
+
+            #hero-actions {
+                gap: 8px;
+            }
+
+            .hero-btn {
+                padding: 10px 18px;
+                font-size: 12.5px;
+                gap: 6px;
+                border-radius: 10px;
+            }
+
+            .hero-badge {
+                font-size: 10px;
+                padding: 4px 10px;
+                margin-bottom: 10px;
+            }
 
             /* Genre bar */
-            #genre-bar { padding: 10px 12px; gap: 6px; }
-            .genre-pill { padding: 6px 13px; font-size: 11.5px; }
+            #genre-bar {
+                padding: 10px 12px;
+                gap: 6px;
+            }
+
+            .genre-pill {
+                padding: 6px 13px;
+                font-size: 11.5px;
+            }
 
             /* Sections */
-            .section { padding: 18px 12px 2px; }
-            .section-title { font-size: 16px; }
-            .see-all { font-size: 12px; }
-            .h-scroll-wrap { padding: 0 12px 16px; }
-            .h-scroll { gap: 10px; }
-            .h-scroll .movie-card { width: 120px; }
+            .section {
+                padding: 18px 12px 2px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .see-all {
+                font-size: 12px;
+            }
+
+            .h-scroll-wrap {
+                padding: 0 12px 16px;
+            }
+
+            .h-scroll {
+                gap: 10px;
+            }
+
+            .h-scroll .movie-card {
+                width: 120px;
+            }
 
             /* Movie grid */
             .movie-grid {
                 grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
                 gap: 10px;
             }
-            .card-title { font-size: 11.5px; }
-            .card-sub { font-size: 10px; }
-            .card-score { font-size: 10px; padding: 2px 6px; }
-            .card-quality { font-size: 8px; padding: 2px 5px; }
-            .card-year { font-size: 9.5px; padding: 2px 5px; }
-            .play-btn-circle { width: 36px; height: 36px; }
+
+            .card-title {
+                font-size: 11.5px;
+            }
+
+            .card-sub {
+                font-size: 10px;
+            }
+
+            .card-score {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+
+            .card-quality {
+                font-size: 8px;
+                padding: 2px 5px;
+            }
+
+            .card-year {
+                font-size: 9.5px;
+                padding: 2px 5px;
+            }
+
+            .play-btn-circle {
+                width: 36px;
+                height: 36px;
+            }
 
             /* Player top bar — stacked on mobile */
             #player-topbar {
@@ -949,35 +1050,47 @@
                 gap: 8px;
                 align-items: center;
             }
+
             #back-btn {
                 padding: 6px 12px;
                 font-size: 12px;
                 border-radius: 8px;
             }
+
             #player-movie-info {
                 flex: 1;
                 min-width: 0;
                 gap: 6px;
             }
-            #player-title { font-size: 12.5px; }
+
+            #player-title {
+                font-size: 12.5px;
+            }
+
             #player-meta-badge {
                 font-size: 10px;
                 padding: 2px 6px;
                 flex-shrink: 0;
             }
+
             #server-selector-wrap {
                 order: 3;
                 width: 100%;
                 margin-left: 0;
                 gap: 6px;
             }
-            .server-label { font-size: 10px; }
+
+            .server-label {
+                font-size: 10px;
+            }
+
             #server-select {
                 flex: 1;
                 font-size: 11.5px;
                 padding: 7px 10px;
                 border-radius: 8px;
             }
+
             #vidking-quality-select {
                 font-size: 11px !important;
                 padding: 6px 8px !important;
@@ -991,23 +1104,53 @@
                 overflow-y: visible;
                 flex-shrink: 0;
             }
-            .player-info-title { font-size: 15px; margin-bottom: 5px; }
-            .player-info-overview { font-size: 12.5px; }
+
+            .player-info-title {
+                font-size: 15px;
+                margin-bottom: 5px;
+            }
+
+            .player-info-overview {
+                font-size: 12.5px;
+            }
         }
 
         /* ══════════ RESPONSIVE — SMALL PHONES ══════════ */
         @media (max-width: 420px) {
-            .logo { font-size: 15px; }
-            #hero { min-height: 260px; padding: 0 10px 22px; }
-            #hero-title { font-size: 17px; }
-            .hero-btn { padding: 9px 14px; font-size: 11.5px; }
+            .logo {
+                font-size: 15px;
+            }
+
+            #hero {
+                min-height: 260px;
+                padding: 0 10px 22px;
+            }
+
+            #hero-title {
+                font-size: 17px;
+            }
+
+            .hero-btn {
+                padding: 9px 14px;
+                font-size: 11.5px;
+            }
+
             .movie-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
             }
-            .h-scroll .movie-card { width: 105px; }
-            #server-select { font-size: 10.5px; }
-            .section-title { font-size: 14px; }
+
+            .h-scroll .movie-card {
+                width: 105px;
+            }
+
+            #server-select {
+                font-size: 10.5px;
+            }
+
+            .section-title {
+                font-size: 14px;
+            }
         }
 
         /* ══════════ PLAYER — LANDSCAPE MOBILE FIX ══════════ */
@@ -1018,11 +1161,15 @@
                 padding: 0 10px;
                 overflow-x: auto;
             }
+
             #server-selector-wrap {
                 order: 0;
                 width: auto;
             }
-            #player-details-row { max-height: 160px; }
+
+            #player-details-row {
+                max-height: 160px;
+            }
         }
     </style>
 </head>
@@ -1041,7 +1188,8 @@
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.35-4.35" />
                     </svg>
-                    <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…" autocomplete="off">
+                    <input id="search-inp" type="text" placeholder="Search movies by title, actor, or genre…"
+                        autocomplete="off">
                     <div id="search-dropdown"></div>
                 </div>
                 <div class="nav-links">
@@ -1104,7 +1252,8 @@
             <!-- Top Rated Movies Row -->
             <section class="section">
                 <div class="section-header">
-                    <div class="section-title"><span class="dot" style="background:var(--gold)"></span> Highest Rated Movies</div>
+                    <div class="section-title"><span class="dot" style="background:var(--gold)"></span> Highest Rated
+                        Movies</div>
                     <span class="see-all" onclick="loadSection('top_rated')">Explore more →</span>
                 </div>
             </section>
@@ -1115,7 +1264,8 @@
             <!-- Bollywood & Indian Hits Row -->
             <section class="section">
                 <div class="section-header">
-                    <div class="section-title"><span class="dot" style="background:var(--cyan)"></span> Bollywood & Indian Cinema</div>
+                    <div class="section-title"><span class="dot" style="background:var(--cyan)"></span> Bollywood &
+                        Indian Cinema</div>
                     <span class="see-all" onclick="loadSection('bollywood')">Explore more →</span>
                 </div>
             </section>
@@ -1126,7 +1276,8 @@
             <!-- Popular Movies Grid -->
             <section class="section">
                 <div class="section-header">
-                    <div class="section-title" id="grid-header-title"><span class="dot" style="background:var(--accent2)"></span> Popular Movies</div>
+                    <div class="section-title" id="grid-header-title"><span class="dot"
+                            style="background:var(--accent2)"></span> Popular Movies</div>
                     <span class="see-all" onclick="loadSection('popular')">Refresh →</span>
                 </div>
                 <div class="movie-grid" id="popular-grid"></div>
@@ -1141,7 +1292,8 @@
             <!-- Player Top Bar -->
             <div id="player-topbar">
                 <button id="back-btn" onclick="closePlayer()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
                         <polyline points="15 18 9 12 15 6"></polyline>
                     </svg>
                     Back to Movies
@@ -1153,45 +1305,64 @@
                 <div id="server-selector-wrap">
                     <span class="server-label">Server:</span>
                     <select id="server-select" onchange="changeServer(this.value)">
-                        <option value="voe_worker" selected>OE Player (Ultra Fast)</option>
-                        <option value="dood">dood</option>
-                        <option value="vidzee">Vidzee (TMDB Fast)</option>
-                        <option value="vidking">idKing Stream (HLS Direct)</option>
-                        <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
-                        <option value="gemma">Gemma Player (IMDb Server)</option>
-                        <option value="insertunit">InsertUnit (IMDb Server)</option>
-                        <option value="primesrc">PrimeSrc (Fast HD)</option>
-                        <option value="vidsrc_to">VidSrc.to</option>
-                        <option value="vidsrc_icu">VidSrc.icu</option>
-                        <option value="autoembed">AutoEmbed</option>
-                        <option value="smashy">SmashyStream</option>
-                        <option value="moviesapi">MoviesAPI</option>
+                        <optgroup label="⚡ Database Auto-Extract Servers">
+                            <option value="voe_worker" selected>VOE.sx Player (Fast Worker)</option>
+                            <option value="dood">Dood.watch (Render API)</option>
+                            <option value="bysejikuar">Bysejikuar.com (Render API)</option>
+                            <option value="mixdrop">Mixdrop.ag (Render API)</option>
+                            <option value="streamta">Streamta.site (Render API)</option>
+                            <option value="streamwish">Streamwish.to (Render API)</option>
+                            <option value="luluvdoo">Luluvdoo.com (Render API)</option>
+                            <option value="filelions">Filelions.to (Worker Extractor)</option>
+                            <option value="vidmoly">VidMoly (Ad-Shield)</option>
+                            <option value="youtube">YouTube Player</option>
+                        </optgroup>
+                        <optgroup label="🌐 Global Multi-Stream Providers">
+                            <option value="vidking">VidKing Stream (HLS Direct)</option>
+                            <option value="vidzee">Vidzee (Ad-Shield Fast)</option>
+                            <option value="vidsrc_sbs">VidSrc.sbs (TMDB Server)</option>
+                            <option value="gemma">Gemma Player (IMDb Server)</option>
+                            <option value="insertunit">InsertUnit (IMDb Server)</option>
+                            <option value="primesrc">PrimeSrc (Fast HD)</option>
+                            <option value="vidsrc_to">VidSrc.to</option>
+                            <option value="vidsrc_icu">VidSrc.icu</option>
+                            <option value="autoembed">AutoEmbed</option>
+                            <option value="smashy">SmashyStream</option>
+                            <option value="moviesapi">MoviesAPI</option>
+                        </optgroup>
                     </select>
-                    <select id="vidking-quality-select" style="display:none; padding:8px 12px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-size:12px; font-weight:600; outline:none; cursor:pointer;" onchange="switchVidkingQuality(this.value)"></select>
+                    <select id="vidking-quality-select"
+                        style="display:none; padding:8px 12px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-size:12px; font-weight:600; outline:none; cursor:pointer;"
+                        onchange="switchVidkingQuality(this.value)"></select>
                 </div>
             </div>
 
             <!-- Player Video Frame & HTML5 HLS Video -->
             <div id="player-main">
-                <div id="stream-status" style="display:none; position:absolute; top:12px; right:12px; z-index:15; background:rgba(7,7,13,0.85); backdrop-filter:blur(8px); color:#fff; font-size:11.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--border2); font-weight:600;"></div>
+                <div id="stream-status"
+                    style="display:none; position:absolute; top:12px; right:12px; z-index:15; background:rgba(7,7,13,0.85); backdrop-filter:blur(8px); color:#fff; font-size:11.5px; padding:6px 12px; border-radius:8px; border:1px solid var(--border2); font-weight:600;">
+                </div>
                 <iframe id="player-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
                     allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
-                <video id="player-video" controls playsinline style="display:none; width:100%; height:100%; position:absolute; inset:0; background:#000; outline:none; z-index:5;"></video>
+                <video id="player-video" controls playsinline
+                    style="display:none; width:100%; height:100%; position:absolute; inset:0; background:#000; outline:none; z-index:5;"></video>
             </div>
 
             <!-- Details below player -->
             <div id="player-details-row">
                 <div class="player-info-title" id="p-info-title">Movie Details</div>
                 <div class="player-info-overview" id="p-info-overview">Loading overview…</div>
-                
+
                 <div id="player-collection-container" style="display:none;">
-                    <div class="section-title" id="p-collection-title" style="font-size:15px; margin-bottom:12px;"><span class="dot" style="background:var(--gold)"></span> The Collection</div>
+                    <div class="section-title" id="p-collection-title" style="font-size:15px; margin-bottom:12px;"><span
+                            class="dot" style="background:var(--gold)"></span> The Collection</div>
                     <div class="h-scroll-wrap" style="padding:0 0 10px;">
                         <div class="h-scroll" id="player-collection-row"></div>
                     </div>
                 </div>
 
-                <div class="section-title" style="font-size:15px; margin-bottom:12px;"><span class="dot"></span> Similar Movies</div>
+                <div class="section-title" style="font-size:15px; margin-bottom:12px;"><span class="dot"></span> Similar
+                    Movies</div>
                 <div class="h-scroll-wrap" style="padding:0 0 10px;">
                     <div class="h-scroll" id="player-similar-row"></div>
                 </div>
@@ -1233,8 +1404,19 @@
 
         // Server URL Providers for direct movie & TV streaming using TMDB ID
         const SERVER_PROVIDERS = {
+            // Database Respected Servers (Direct auto-play)
             voe_worker: (id) => `https://voe-sx-movies-play.ytbro8326.workers.dev/${id}`,
             dood: (id) => `https://proxy-stream-server-4m7f.onrender.com/api/${id}`,
+            bysejikuar: (id) => `https://bysejikuarcom.onrender.com/api/${id}`,
+            mixdrop: (id) => `https://mixdrop.onrender.com/api/${id}`,
+            streamta: (id) => `https://streamta.onrender.com/api/${id}`,
+            streamwish: (id) => `https://streamwish.onrender.com/api/${id}`,
+            luluvdoo: (id) => `https://luluvdoo.onrender.com/api/${id}`,
+            filelions: (id) => `https://filelions-to-callister.ytbro8326.workers.dev/${id}`,
+            vidmoly: (id) => `https://vidmoly.biz/embed-${id}.html`,
+            youtube: (id) => `https://www.youtube.com/embed/${id}`,
+
+            // Global Multi-Stream Providers
             vidzee: (id) => `https://player.vidzee.wtf/embed/movie/${id}`,
             vidsrc_sbs: (id, imdbId, type = "movie", s = 1, e = 1) => type === "tv" ? `https://vidsrc.sbs/embed/tv/${id}/${s}/${e}` : `https://vidsrc.sbs/embed/movie/${id}`,
             gemma: (id, imdbId) => `https://gemma416okl.com/play/${imdbId || id}`,
@@ -1246,6 +1428,120 @@
             smashy: (id) => `https://player.smashystream.com/movie/${id}`,
             moviesapi: (id) => `https://moviesapi.club/movie/${id}`
         };
+
+        // ═══════════════════════════════════════════════════════════
+        //  DATABASE CACHE & TMDB / IMDB LOOKUP
+        // ═══════════════════════════════════════════════════════════
+        let customDbLoaded = false;
+        const dbByTmdb = new Map();
+        const dbByImdb = new Map();
+
+        async function loadCustomDatabase() {
+            if (customDbLoaded) return;
+            const candidatePaths = [
+                "../custom_merged_data.json",
+                "./custom_merged_data.json",
+                "custom_merged_data.json",
+                "https://raw.githubusercontent.com/ytbro8326-sudo/primesrc_single_flaresolver/refs/heads/main/custom_merged_data.json"
+            ];
+
+            for (const path of candidatePaths) {
+                try {
+                    const res = await fetch(path);
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(item => {
+                            if (!item) return;
+                            const ti = String(item["tmdb/imdb"] || "");
+                            const parts = ti.split("/");
+                            const tmdb = (parts[0] || "").trim();
+                            const imdb = (parts[1] || "").trim().toLowerCase();
+                            if (tmdb) dbByTmdb.set(tmdb, item);
+                            if (imdb) dbByImdb.set(imdb, item);
+                            if (item.serial) dbByTmdb.set(String(item.serial), item);
+                        });
+                        customDbLoaded = true;
+                        console.log(`Loaded custom database with ${data.length} items (${dbByTmdb.size} indexed) from ${path}`);
+                        break;
+                    }
+                } catch (e) {
+                    // Try next candidate
+                }
+            }
+        }
+
+        function formatYouTubeEmbedUrl(url) {
+            if (!url) return url;
+            let videoId = "";
+            if (url.includes("/embed/")) {
+                videoId = url.split("/embed/")[1].split("?")[0].split("&")[0].split("/")[0];
+            } else if (url.includes("watch?v=")) {
+                try {
+                    const urlObj = new URL(url);
+                    videoId = urlObj.searchParams.get("v") || "";
+                } catch (e) {
+                    videoId = url.split("watch?v=")[1].split("&")[0];
+                }
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0].split("&")[0].split("/")[0];
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+        }
+
+        function detectServerFromDbItem(item) {
+            if (!item) return null;
+            // Iterate over all keys starting with host
+            for (const key of Object.keys(item)) {
+                if (key.startsWith("host") && typeof item[key] === "string") {
+                    const url = item[key].trim();
+                    const lower = url.toLowerCase();
+                    if (lower.includes("voe.sx") || lower.includes("voe.")) {
+                        return { serverKey: "voe_worker", domain: "voe.sx", rawUrl: url, label: "VOE.sx" };
+                    }
+                    if (lower.includes("dood.") || lower.includes("doodstream") || lower.includes("doodprime")) {
+                        return { serverKey: "dood", domain: "dood.watch", rawUrl: url, label: "Dood.watch" };
+                    }
+                    if (lower.includes("bysejikuar.")) {
+                        return { serverKey: "bysejikuar", domain: "bysejikuar.com", rawUrl: url, label: "Bysejikuar.com" };
+                    }
+                    if (lower.includes("mixdrop.")) {
+                        return { serverKey: "mixdrop", domain: "mixdrop.ag", rawUrl: url, label: "Mixdrop.ag" };
+                    }
+                    if (lower.includes("streamta.")) {
+                        return { serverKey: "streamta", domain: "streamta.site", rawUrl: url, label: "Streamta.site" };
+                    }
+                    if (lower.includes("streamwish.")) {
+                        return { serverKey: "streamwish", domain: "streamwish.to", rawUrl: url, label: "Streamwish.to" };
+                    }
+                    if (lower.includes("luluvdoo.") || lower.includes("lulustream") || lower.includes("luluvid")) {
+                        return { serverKey: "luluvdoo", domain: "luluvdoo.com", rawUrl: url, label: "Luluvdoo.com" };
+                    }
+                    if (lower.includes("filelions.") || lower.includes("callistanise") || lower.includes("vidhide") || lower.includes("vidnest.")) {
+                        return { serverKey: "filelions", domain: "filelions.to", rawUrl: url, label: "Filelions.to" };
+                    }
+                    if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
+                        return { serverKey: "youtube", domain: "youtube.com", rawUrl: formatYouTubeEmbedUrl(url), label: "YouTube Player" };
+                    }
+                    if (lower.includes("vidmoly.")) {
+                        return { serverKey: "vidmoly", domain: "vidmoly.biz", rawUrl: url, label: "VidMoly" };
+                    }
+                    if (lower.includes("dailymotion.com")) {
+                        return { serverKey: "direct_embed", domain: "dailymotion.com", rawUrl: url, label: "Dailymotion" };
+                    }
+                    if (lower.includes("vimeo.com")) {
+                        return { serverKey: "direct_embed", domain: "vimeo.com", rawUrl: url, label: "Vimeo" };
+                    }
+                    if (lower.includes("archive.org")) {
+                        return { serverKey: "direct_embed", domain: "archive.org", rawUrl: url, label: "Archive.org" };
+                    }
+                    if (lower.includes("savefiles.")) {
+                        return { serverKey: "direct_embed", domain: "savefiles.com", rawUrl: url, label: "SaveFiles" };
+                    }
+                }
+            }
+            return null;
+        }
 
         // ═══════════════════════════════════════════════════════════
         //  VIDKING STREAM PRIORITY STRATEGY
@@ -1376,7 +1672,7 @@
                     hlsInstance.attachMedia(video);
 
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
-                        video.play().catch(() => {});
+                        video.play().catch(() => { });
                     });
 
                     hlsInstance.on(Hls.Events.ERROR, (event, data) => {
@@ -1392,7 +1688,7 @@
                     // Native Safari HLS
                     video.src = stream.url;
                     video.addEventListener('loadedmetadata', () => {
-                        video.play().catch(() => {});
+                        video.play().catch(() => { });
                     }, { once: true });
                     video.addEventListener('error', () => {
                         showStreamStatus(`Stream error on ${stream.label}, trying next…`, 2000);
@@ -1434,6 +1730,9 @@
         //  HOME PAGE INITIALIZATION
         // ═══════════════════════════════════════════════════════════
         async function initHome() {
+            // Pre-load custom JSON database in background
+            loadCustomDatabase();
+
             // Load Hero Featured Movie
             loadFeaturedHero();
 
@@ -1634,11 +1933,17 @@
                         const poster = m.poster_path ? `${TMDB_IMG_W342}${m.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster';
                         const year = (m.release_date || '').split('-')[0] || 'N/A';
                         const score = m.vote_average ? m.vote_average.toFixed(1) : 'NR';
+                        const dbMatch = dbByTmdb.get(String(m.id));
+                        let dbBadge = '';
+                        if (dbMatch) {
+                            const dInfo = detectServerFromDbItem(dbMatch);
+                            dbBadge = `<span style="background:rgba(229,9,20,0.22); color:var(--accent); font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(229,9,20,0.35);">⚡ ${dInfo ? dInfo.label : 'DB Stream'}</span>`;
+                        }
                         return `
                             <div class="sd-item" onclick="playMovie(${m.id}); document.getElementById('search-dropdown').classList.remove('show');">
                                 <img class="sd-img" src="${poster}" alt="${m.title}">
                                 <div class="sd-info">
-                                    <div class="sd-title">${m.title}</div>
+                                    <div class="sd-title">${m.title} ${dbBadge}</div>
                                     <div class="sd-meta">
                                         <span>${year}</span>
                                         <span class="sd-score">★ ${score}</span>
@@ -1667,6 +1972,11 @@
 
             currentMovie = movie;
 
+            // Ensure custom database is ready
+            if (!customDbLoaded) {
+                await loadCustomDatabase();
+            }
+
             // Set Top Bar info
             document.getElementById('player-title').textContent = movie.title || movie.original_title;
             const year = (movie.release_date || '').split('-')[0] || '';
@@ -1677,8 +1987,35 @@
             document.getElementById('p-info-title').textContent = `${movie.title} (${year})`;
             document.getElementById('p-info-overview').textContent = movie.overview || "No overview available for this movie.";
 
-            // Load iframe server embed
-            await updatePlayerIframe(movie, currentServer);
+            // ── Match TMDB / IMDb ID in custom database ──
+            const tmdbStr = String(movie.id);
+            const imdbStr = (movie.imdb_id || (movie.external_ids && movie.external_ids.imdb_id) || '').trim().toLowerCase();
+
+            let matchedItem = dbByTmdb.get(tmdbStr);
+            if (!matchedItem && imdbStr) {
+                matchedItem = dbByImdb.get(imdbStr);
+            }
+
+            let targetServer = currentServer;
+            let detectedInfo = null;
+
+            if (matchedItem) {
+                detectedInfo = detectServerFromDbItem(matchedItem);
+                if (detectedInfo) {
+                    targetServer = detectedInfo.serverKey;
+                    currentServer = targetServer;
+                    const selectEl = document.getElementById('server-select');
+                    if (selectEl) {
+                        selectEl.value = targetServer;
+                    }
+                    showStreamStatus(`⚡ Database Match: [${detectedInfo.label}] — Auto Extracting & Playing…`, 3500);
+                }
+            } else {
+                showStreamStatus(`Playing stream via ${currentServer.replace('_', ' ').toUpperCase()}…`, 2000);
+            }
+
+            // Load iframe server embed or stream
+            await updatePlayerIframe(movie, targetServer, detectedInfo);
 
             // Load Collection Movies
             const collectionContainer = document.getElementById('player-collection-container');
@@ -1709,13 +2046,13 @@
             document.getElementById('view-player').classList.add('active');
         }
 
-        async function updatePlayerIframe(movieOrId, serverKey) {
+        async function updatePlayerIframe(movieOrId, serverKey, detectedDbInfo = null) {
             const tmdbId = typeof movieOrId === 'object' ? movieOrId.id : movieOrId;
             let imdbId = typeof movieOrId === 'object' ? (movieOrId.imdb_id || (movieOrId.external_ids && movieOrId.external_ids.imdb_id)) : null;
 
             const frame = document.getElementById('player-frame');
 
-            // 1. idKing HLS Direct Player
+            // 1. VidKing HLS Direct Player
             if (serverKey === 'vidking') {
                 await playVidKingHLS(tmdbId);
                 return;
@@ -1725,7 +2062,63 @@
             stopVideoPlayback();
             frame.style.display = 'block';
 
-            // 2. IMDb-based servers
+            // Reset standard frame attributes
+            frame.removeAttribute('sandbox');
+            frame.removeAttribute('referrerpolicy');
+            frame.setAttribute('title', 'Movie Player');
+            frame.setAttribute('frameborder', '0');
+            frame.setAttribute('allowfullscreen', 'true');
+            frame.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+
+            // 2. YouTube Embed handling with exact required parameters
+            const isYouTube = serverKey === 'youtube' || 
+                              (detectedDbInfo && (detectedDbInfo.domain === 'youtube.com' || detectedDbInfo.serverKey === 'youtube')) ||
+                              (detectedDbInfo && detectedDbInfo.rawUrl && (detectedDbInfo.rawUrl.includes('youtube.com') || detectedDbInfo.rawUrl.includes('youtu.be')));
+
+            if (isYouTube && detectedDbInfo && detectedDbInfo.rawUrl) {
+                const embedUrl = formatYouTubeEmbedUrl(detectedDbInfo.rawUrl);
+                frame.removeAttribute('sandbox');
+                frame.setAttribute('title', 'YouTube video player');
+                frame.setAttribute('frameborder', '0');
+                frame.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                frame.setAttribute('allowfullscreen', 'true');
+                frame.src = embedUrl;
+                showStreamStatus('▶ Playing YouTube Stream', 3000);
+                return;
+            }
+
+            // 3. VidMoly & Vidzee Adblocking Sandbox handling
+            const isVidmoly = serverKey === 'vidmoly' || 
+                              (detectedDbInfo && (detectedDbInfo.domain === 'vidmoly.biz' || detectedDbInfo.serverKey === 'vidmoly')) ||
+                              (detectedDbInfo && detectedDbInfo.rawUrl && detectedDbInfo.rawUrl.includes('vidmoly.'));
+            
+            const isVidzee = serverKey === 'vidzee';
+
+            if (isVidmoly || isVidzee) {
+                // Apply strict adblocking sandbox to block popup ads, redirects, and intrusive ad scripts
+                frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+                frame.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+
+                if (isVidmoly && detectedDbInfo && detectedDbInfo.rawUrl) {
+                    frame.src = detectedDbInfo.rawUrl;
+                    showStreamStatus('🛡️ VidMoly Stream (Ad-Shield Active)', 3000);
+                    return;
+                } else if (isVidzee) {
+                    const url = SERVER_PROVIDERS['vidzee'](tmdbId);
+                    frame.src = url;
+                    showStreamStatus('🛡️ Vidzee Player (Ad-Shield Active)', 3000);
+                    return;
+                }
+            }
+
+            // 4. Other Direct Embeds (Vimeo, Dailymotion, Archive.org, SaveFiles, etc.)
+            if (serverKey === 'direct_embed' && detectedDbInfo && detectedDbInfo.rawUrl) {
+                frame.src = detectedDbInfo.rawUrl;
+                return;
+            }
+
+            // 5. IMDb-based servers
             if (serverKey === 'insertunit' || serverKey === 'gemma') {
                 // Convert TMDB ID to IMDb ID specifically for IMDb-based servers
                 if (!imdbId) {
@@ -1749,11 +2142,11 @@
                 return;
             }
 
-            // 3. Other TMDB direct iframe servers
+            // 6. TMDB & DB Direct Server URL Providers
             const provider = SERVER_PROVIDERS[serverKey] || SERVER_PROVIDERS['voe_worker'] || SERVER_PROVIDERS['primesrc'];
-            const url = provider(tmdbId);
+            const url = provider(tmdbId, imdbId);
 
-            // Auto-fallback: if VOE fails or times out, switch to dood
+            // Auto-fallback helper
             if (serverKey === 'voe_worker') {
                 let voeFallbackTimer = null;
                 let voeFailed = false;
@@ -1777,7 +2170,7 @@
                         const fdoc = frame.contentDocument || frame.contentWindow?.document;
                         const isBlank = !fdoc || fdoc.URL === 'about:blank' || fdoc.body?.innerHTML?.trim() === '';
                         if (isBlank) switchToDood();
-                    } catch(e) {
+                    } catch (e) {
                         // cross-origin means it loaded something — leave it
                     }
                 }, 9000);
