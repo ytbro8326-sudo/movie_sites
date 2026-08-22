@@ -1433,42 +1433,64 @@
         //  DATABASE CACHE & TMDB / IMDB LOOKUP
         // ═══════════════════════════════════════════════════════════
         let customDbLoaded = false;
+        let dbLoadingPromise = null;
         const dbByTmdb = new Map();
         const dbByImdb = new Map();
 
         async function loadCustomDatabase() {
-            if (customDbLoaded) return;
-            const candidatePaths = [
-                "../custom_merged_data.json",
-                "./custom_merged_data.json",
-                "custom_merged_data.json",
-                "https://raw.githubusercontent.com/ytbro8326-sudo/primesrc_single_flaresolver/refs/heads/main/custom_merged_data.json"
-            ];
+            if (customDbLoaded) return true;
+            if (dbLoadingPromise) return dbLoadingPromise;
 
-            for (const path of candidatePaths) {
-                try {
-                    const res = await fetch(path);
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        data.forEach(item => {
-                            if (!item) return;
-                            const ti = String(item["tmdb/imdb"] || "");
-                            const parts = ti.split("/");
-                            const tmdb = (parts[0] || "").trim();
-                            const imdb = (parts[1] || "").trim().toLowerCase();
-                            if (tmdb) dbByTmdb.set(tmdb, item);
-                            if (imdb) dbByImdb.set(imdb, item);
-                            if (item.serial) dbByTmdb.set(String(item.serial), item);
-                        });
-                        customDbLoaded = true;
-                        console.log(`Loaded custom database with ${data.length} items (${dbByTmdb.size} indexed) from ${path}`);
-                        break;
+            dbLoadingPromise = (async () => {
+                const candidatePaths = [
+                    "https://raw.githubusercontent.com/ytbro8326-sudo/primesrc_single_flaresolver/refs/heads/main/custom_merged_data.json",
+                    "https://cdn.jsdelivr.net/gh/ytbro8326-sudo/primesrc_single_flaresolver@main/custom_merged_data.json",
+                    "../custom_merged_data.json",
+                    "./custom_merged_data.json",
+                    "custom_merged_data.json"
+                ];
+
+                for (const path of candidatePaths) {
+                    try {
+                        const res = await fetch(path);
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            data.forEach(item => {
+                                if (!item) return;
+                                const ti = String(item["tmdb/imdb"] || "").trim();
+                                const parts = ti.split("/");
+                                const p0 = (parts[0] || "").trim();
+                                const p1 = (parts[1] || "").trim().toLowerCase();
+
+                                if (p0.startsWith("tt")) {
+                                    dbByImdb.set(p0.toLowerCase(), item);
+                                } else if (p0) {
+                                    dbByTmdb.set(p0, item);
+                                }
+
+                                if (p1.startsWith("tt")) {
+                                    dbByImdb.set(p1.toLowerCase(), item);
+                                } else if (p1) {
+                                    dbByTmdb.set(p1, item);
+                                }
+
+                                if (item.serial) {
+                                    dbByTmdb.set(String(item.serial), item);
+                                }
+                            });
+                            customDbLoaded = true;
+                            console.log(`Successfully loaded & indexed ${data.length} database movies from ${path}`);
+                            return true;
+                        }
+                    } catch (e) {
+                        console.warn(`Could not load database from ${path}:`, e);
                     }
-                } catch (e) {
-                    // Try next candidate
                 }
-            }
+                return false;
+            })();
+
+            return dbLoadingPromise;
         }
 
         function formatYouTubeEmbedUrl(url) {
@@ -1967,31 +1989,41 @@
         //  MOVIE STREAMING PLAYER
         // ═══════════════════════════════════════════════════════════
         async function playMovie(tmdbId) {
-            const movie = await fetchTMDB(`/movie/${tmdbId}`, { append_to_response: 'external_ids' });
-            if (!movie) return;
+            // 1. Ensure custom database is ready first
+            await loadCustomDatabase();
+
+            const tmdbStr = String(tmdbId);
+            let matchedItem = dbByTmdb.get(tmdbStr);
+
+            // 2. Fetch movie metadata from TMDB with fallback
+            let movie = await fetchTMDB(`/movie/${tmdbId}`, { append_to_response: 'external_ids' });
+            if (!movie) {
+                movie = {
+                    id: tmdbId,
+                    title: matchedItem ? matchedItem.title : `Movie #${tmdbId}`,
+                    original_title: matchedItem ? matchedItem.title : `Movie #${tmdbId}`,
+                    overview: "Streaming high definition media directly from database stream servers.",
+                    release_date: "",
+                    vote_average: 7.5
+                };
+            }
 
             currentMovie = movie;
 
-            // Ensure custom database is ready
-            if (!customDbLoaded) {
-                await loadCustomDatabase();
-            }
-
             // Set Top Bar info
-            document.getElementById('player-title').textContent = movie.title || movie.original_title;
+            const title = movie.title || movie.original_title || (matchedItem ? matchedItem.title : 'Movie');
+            document.getElementById('player-title').textContent = title;
             const year = (movie.release_date || '').split('-')[0] || '';
             const runtime = movie.runtime ? `${movie.runtime}m` : 'HD';
             document.getElementById('player-meta-badge').textContent = `${year} • ${runtime} • ★ ${(movie.vote_average || 0).toFixed(1)}`;
 
             // Set Overview & Info
-            document.getElementById('p-info-title').textContent = `${movie.title} (${year})`;
+            document.getElementById('p-info-title').textContent = `${title} ${year ? '(' + year + ')' : ''}`;
             document.getElementById('p-info-overview').textContent = movie.overview || "No overview available for this movie.";
 
             // ── Match TMDB / IMDb ID in custom database ──
-            const tmdbStr = String(movie.id);
             const imdbStr = (movie.imdb_id || (movie.external_ids && movie.external_ids.imdb_id) || '').trim().toLowerCase();
 
-            let matchedItem = dbByTmdb.get(tmdbStr);
             if (!matchedItem && imdbStr) {
                 matchedItem = dbByImdb.get(imdbStr);
             }
@@ -2008,7 +2040,7 @@
                     if (selectEl) {
                         selectEl.value = targetServer;
                     }
-                    showStreamStatus(`⚡ Database Match: [${detectedInfo.label}] — Auto Extracting & Playing…`, 3500);
+                    showStreamStatus(`⚡ Database Match: [${detectedInfo.label}] — Auto Extracting & Playing…`, 4000);
                 }
             } else {
                 showStreamStatus(`Playing stream via ${currentServer.replace('_', ' ').toUpperCase()}…`, 2000);
