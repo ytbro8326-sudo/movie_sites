@@ -1764,7 +1764,7 @@
             let streamIndex = specificUrl ? currentVidKingStreams.findIndex(s => s.url === specificUrl) : 0;
             if (streamIndex < 0) streamIndex = 0;
 
-            function tryStream(index) {
+            async function tryStream(index) {
                 if (index >= currentVidKingStreams.length) {
                     showStreamStatus("All VidKing streams failed, falling back to VOE…", 3000);
                     video.style.display = 'none';
